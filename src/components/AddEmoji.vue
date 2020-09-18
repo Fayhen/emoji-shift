@@ -1,0 +1,34 @@
+<template>
+  <div class="button-wrapper">
+    <p>Add an emoji!</p>
+    <button @click="addEvent('heart')">Add heart</button>
+    <button @click="addEvent('flower')">Add flower</button>
+    <button @click="addEvent('fruit')">Add fruit</button>
+    <button @click="addEvent('animal')">Add animal</button>
+    <button @click="addEvent('food')">Add food</button>
+    <button @click="addEvent('astra')">Add astra</button>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "AddEmoji",
+  methods: {
+    addEvent(type: string) {
+      return console.log("Emitting add event for: ", type)
+    }
+  }
+})
+</script>
+
+<style scoped>
+.button-wrapper {
+  font-size: 1rem !important;
+}
+button {
+  width: 95%;
+  margin: 0;
+}
+</style>
