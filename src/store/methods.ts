@@ -8,27 +8,27 @@ export function setDefault() {
   state.emojis.clear();
   state.emojis.set(0, {
     position: 0,
-    codepoint: "0x2764",
-    label: "Red heart",
+    codepoint: "0x1F493",
+    label: "Beating heart",
     category: "hearts"
   });
   state.emojis.set(1, {
     position: 1,
-    codepoint: "0x1F49A",
-    label: "Green heart",
-    category: "hearts"
+    codepoint: "0x1F490",
+    label: "Bouquet",
+    category: "flowers"
   });
   state.emojis.set(2, {
     position: 2,
-    codepoint: "0x1F48C",
-    label: "Heart envelope",
-    category: "hearts"
+    codepoint: "0x1F352",
+    label: "Cherries",
+    category: "fruits"
   });
   state.emojis.set(3, {
     position: 3,
-    codepoint: "0x1F49D",
-    label: "Heart with ribbon",
-    category: "hearts"
+    codepoint: "0x1F30C",
+    label: "Milky way",
+    category: "astra"
   });
   // state.emojis.set(1, ["0x1F49A", "Green heart"]);
   // state.emojis.set(2, ["0x1F48C", "Heart envelope"]);
@@ -42,7 +42,7 @@ export function shiftEmoji(
   category: keyof AllEmojis
 ) {
   const validEmojis = getCategory(category);
-  const index = getRandomInt(0, validEmojis.length)
+  const index = getRandomInt(0, validEmojis.length);
   const newEmoji = validEmojis[index];
   console.log("newEmoji: ", newEmoji);
   state.emojis.set(id, {

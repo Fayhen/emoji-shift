@@ -3,8 +3,10 @@
     <p>Add an emoji!</p>
     <button @click="addEvent('heart')">Add heart</button>
     <button @click="addEvent('flower')">Add flower</button>
+    <button @click="addEvent('fruit')">Add fruit</button>
     <button @click="addEvent('animal')">Add animal</button>
     <button @click="addEvent('food')">Add food</button>
+    <button @click="addEvent('astra')">Add astra</button>
   </div>
 </template>
 
