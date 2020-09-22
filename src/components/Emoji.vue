@@ -1,5 +1,5 @@
 <template>
-<p role="img">{{ emoji }}</p>
+  <p role="img" :aria-label="label">{{ String.fromCodePoint(codepoint) }}</p>
 </template>
 
 <script lang="ts">
@@ -7,11 +7,24 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Emoji",
-  data() {
-    return {
-      emoji: String.fromCodePoint(0x1F495)
-    }
-  }
+  props: {
+    position: {
+      type: Number,
+      required: true
+    },
+    codepoint: {
+      type: String,
+      required: true
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    category: {
+      type: String,
+      required: true
+    },
+  },
 })
 </script>
 
@@ -20,11 +33,4 @@ p {
   display: block;
   border: 1px dashed orange;
 }
-/* .wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px dashed orangered;
-} */
 </style>
