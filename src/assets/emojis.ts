@@ -1,7 +1,7 @@
 import { AllEmojis } from "@/assets/interfaces";
 
 // Coomented-out emojis were added post 2018 and will not
-// properly render on outdate but fairly new devices
+// properly render on outdated but fairly new devices
 const emojis: AllEmojis = {
   "hearts": [
     ["0x2764", "Red heart"],
@@ -247,5 +247,3 @@ export const getCategory = (category: keyof AllEmojis) => {
   const validEmojis = emojis[category]
   return validEmojis;
 }
-
-// export { emojis as default }

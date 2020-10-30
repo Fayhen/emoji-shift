@@ -1,64 +1,53 @@
 <template>
   <div class="home">
-    <Message :msg="state.message" />
-    <div class="upper-wrapper">
+    <Message
+      :msg="state.message1"
+      @update:newMessage="state.message1 = $event"
+    />
+    <div class="emoji-box-wrapper">
       <div
         class="emoji-wrapper"
-        v-for="[id, emojiData] in state.emojis.entries()"
-        :key="id"
+        v-for="[position, emojiData] in state.emojis.entries()"
+        :key="position"
       >
         <Emoji
           class="emoji-box"
-          :position="emojiData.position"
+          :position="position"
           :codepoint="emojiData.codepoint"
           :label="emojiData.label"
           :category="emojiData.category"
         />
         <div class="button-wrapper">
-          <button @click="shiftEmoji(id, emojiData.position, emojiData.category)">Shift</button>
-          <button>Remove</button>
-          <button>&#60;</button>
-          <span style="font-size: 0.9rem;">Move</span>
-          <button>&#62;</button>
+          <button class="button-left" @click="moveLeft(position)">&#60;</button>
+          <button @click="shiftEmoji(position, emojiData.category)">
+            Shift
+          </button>
+          <button @click="removeEmoji(position)">Remove</button>
+          <button class="button-right" @click="moveRight(position)">
+            &#62;
+          </button>
         </div>
       </div>
-      <!-- <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div> -->
-      <div class="emoji-wrapper">
-        <AddEmoji class="emoji-box" />
-      </div>
     </div>
+    <Message
+      :msg="state.message2"
+      @update:newMessage="state.message2 = $event"
+    />
+    <button class="button-left" @click="setDefault()">Start over</button>
+    <button class="button-right" @click="state.emojis.clear()">
+      Clear all
+    </button>
+    <AddEmoji @add-emoji="newEmoji($event)" style="border: 1px dashed black;" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { AllEmojis } from "@/assets/interfaces";
-import { getCategory } from "@/assets/emojis";
+import { defineComponent, onMounted } from "vue";
+
 import state from "@/store/state";
-import { setDefault, shiftEmoji } from "@/store/methods";
+import { setDefault, setEmoji, shiftEmoji, removeEmoji } from "@/store/methods";
+import { AllEmojis, ActiveEmoji } from "@/assets/interfaces";
+
 import Message from "@/components/Message.vue";
 import Emoji from "@/components/Emoji.vue";
 import AddEmoji from "@/components/AddEmoji.vue";
@@ -76,11 +65,60 @@ export default defineComponent({
     };
   },
   setup() {
-    if (state.emojis.size === 0) {
-      setDefault();
+    onMounted(() => {
+      if (state.emojis.size === 0) {
+        setDefault();
+      }
+      console.log(state.emojis);
+    });
+
+    function newEmoji(emojiType: keyof AllEmojis) {
+      console.log(emojiType);
+      shiftEmoji(state.emojis.size, emojiType);
     }
-    console.log(state.emojis);
-    return { shiftEmoji }
+
+    function moveLeft(position: number) {
+      console.log("Moving left from position", position);
+      if (position > 0) {
+        const currentEmoji: ActiveEmoji | undefined = state.emojis.get(
+          position
+        );
+        const leftEmoji: ActiveEmoji | undefined = state.emojis.get(
+          position - 1
+        );
+
+        if (currentEmoji != undefined && leftEmoji != undefined) {
+          setEmoji(position - 1, currentEmoji);
+          setEmoji(position, leftEmoji);
+        }
+      }
+    }
+
+    function moveRight(position: number) {
+      console.log("Moving right from position", position);
+      if (position < state.emojis.size) {
+        const currentEmoji: ActiveEmoji | undefined = state.emojis.get(
+          position
+        );
+        const rightEmoji: ActiveEmoji | undefined = state.emojis.get(
+          position + 1
+        );
+
+        if (currentEmoji != undefined && rightEmoji != undefined) {
+          setEmoji(position + 1, currentEmoji);
+          setEmoji(position, rightEmoji);
+        }
+      }
+    }
+
+    return {
+      shiftEmoji,
+      newEmoji,
+      removeEmoji,
+      setDefault,
+      moveLeft,
+      moveRight
+    };
   }
 });
 </script>
@@ -88,10 +126,12 @@ export default defineComponent({
 <style scoped>
 .home {
   border: 1px solid black;
+  font-family: "Verdana", "Geneva", sans-serif;
 }
-.upper-wrapper {
+.emoji-box-wrapper {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .emoji-wrapper {
   display: flex;
@@ -111,9 +151,31 @@ export default defineComponent({
 .button-wrapper {
   flex-direction: row;
   justify-content: space-between;
+  border: 1px solid black;
 }
-.button-wrapper button {
-  margin: 0 2px 0 2px;
+button {
+  margin: 0;
+  padding: 0.5em;
+  font-size: 1em;
+  border: 2px solid rgb(216, 185, 255);
+  background-color: rgb(216, 185, 255);
+  transition: 400ms ease;
+}
+button:hover {
+  background-color: rgb(231, 209, 255);
+}
+button:focus {
+  outline: 0;
+}
+.button-left {
+  padding: 0.5em 1em 0.5em 1em;
+  border-top-left-radius: 5em;
+  border-bottom-left-radius: 5em;
+}
+.button-right {
+  padding: 0.5em 1em 0.5em 1em;
+  border-top-right-radius: 5em;
+  border-bottom-right-radius: 5em;
 }
 
 @media only screen and (max-width: 600px) {

@@ -8,7 +8,6 @@ export interface AllEmojis {
 }
 
 export interface ActiveEmoji {
-  position: number,
   codepoint: string,
   label: string,
   category: string

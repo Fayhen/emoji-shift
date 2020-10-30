@@ -7,6 +7,11 @@
 </template>
 
 <style>
+html,
+body {
+  height: 100%;
+  background-color: rgb(230, 215, 255);
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -17,6 +22,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* min-height: 100vh; */
 }
 
 #nav {

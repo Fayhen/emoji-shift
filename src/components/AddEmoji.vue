@@ -1,12 +1,14 @@
 <template>
-  <div class="button-wrapper">
+  <div>
     <p>Add an emoji!</p>
-    <button @click="addEvent('heart')">Add heart</button>
-    <button @click="addEvent('flower')">Add flower</button>
-    <button @click="addEvent('fruit')">Add fruit</button>
-    <button @click="addEvent('animal')">Add animal</button>
-    <button @click="addEvent('food')">Add food</button>
-    <button @click="addEvent('astra')">Add astra</button>
+    <div class="button-wrapper">
+      <button @click="addEmoji('hearts')">Add heart &#128149;</button>
+      <button @click="addEmoji('flowers')">Add flower &#127801;</button>
+      <button @click="addEmoji('fruits')">Add fruit &#127817;</button>
+      <button @click="addEmoji('animals')">Add animal &#128049;</button>
+      <button @click="addEmoji('food')">Add food &#129360;</button>
+      <button @click="addEmoji('astra')">Add astra &#127776;</button>
+    </div>
   </div>
 </template>
 
@@ -16,19 +18,35 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "AddEmoji",
   methods: {
-    addEvent(type: string) {
-      return console.log("Emitting add event for: ", type)
+    addEmoji(type: string) {
+      this.$emit("add-emoji", type);
     }
   }
-})
+});
 </script>
 
 <style scoped>
 .button-wrapper {
-  font-size: 1rem !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  border: 1px dashed black;
 }
 button {
-  width: 95%;
-  margin: 0;
+  min-width: 10rem;
+  margin: 2px;
+  padding: 0.5em;
+  font-size: 1em;
+  border: 1px solid rgb(216, 185, 255);
+  border-radius: 5rem;
+  background-color: rgb(216, 185, 255);
+  transition: 400ms ease;
+}
+button:hover {
+  background-color: rgb(231, 209, 255);
+}
+button:focus {
+  outline: 0;
 }
 </style>
