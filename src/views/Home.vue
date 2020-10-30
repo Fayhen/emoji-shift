@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Message :msg="state.message" />
-    <div class="upper-wrapper">
+    <div class="emoji-box-wrapper">
       <div
         class="emoji-wrapper"
         v-for="[id, emojiData] in state.emojis.entries()"
@@ -46,10 +46,8 @@
         <Emoji class="emoji-box" />
         <button>Shift</button>
       </div> -->
-      <div class="emoji-wrapper">
-        <AddEmoji class="emoji-box" />
-      </div>
     </div>
+    <AddEmoji />
   </div>
 </template>
 
@@ -89,9 +87,10 @@ export default defineComponent({
 .home {
   border: 1px solid black;
 }
-.upper-wrapper {
+.emoji-box-wrapper {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .emoji-wrapper {
   display: flex;
@@ -108,6 +107,9 @@ export default defineComponent({
   font-size: 9.5rem;
   border: 1px dashed black;
 }
+/* .add-buttons-wrapper {
+
+} */
 .button-wrapper {
   flex-direction: row;
   justify-content: space-between;
