@@ -33,7 +33,7 @@
 import { defineComponent, onMounted } from "vue";
 
 import state from "@/store/state";
-import { setDefault, shiftEmoji } from "@/store/methods";
+import { setDefault, setEmoji, shiftEmoji } from "@/store/methods";
 import { AllEmojis, ActiveEmoji } from "@/assets/interfaces";
 
 import Message from "@/components/Message.vue";
@@ -60,32 +60,43 @@ export default defineComponent({
       console.log(state.emojis);
     });
 
-    // const lastPosition = ref(state.emojis.size);
-
-    // function updateLastPosition() {
-    //   lastPosition.value++;
-    //   console.log(lastPosition.value);
-    // }
-
     function newEmoji(emojiType: keyof AllEmojis) {
       console.log(emojiType);
-      shiftEmoji(state.emojis.size + 1, emojiType);
+      shiftEmoji(state.emojis.size, emojiType);
     }
 
     function moveLeft(position: number) {
       console.log("Moving left from position", position);
-      if (position > 1) {
+      if (position > 0) {
         const currentEmoji: ActiveEmoji | undefined = state.emojis.get(
           position
         );
         const leftEmoji: ActiveEmoji | undefined = state.emojis.get(
           position - 1
         );
+
+        if (currentEmoji != undefined && leftEmoji != undefined) {
+          setEmoji(position - 1, currentEmoji);
+          setEmoji(position, leftEmoji);
+        }
       }
     }
 
     function moveRight(position: number) {
       console.log("Moving right from position", position);
+      if (position < state.emojis.size) {
+        const currentEmoji: ActiveEmoji | undefined = state.emojis.get(
+          position
+        );
+        const rightEmoji: ActiveEmoji | undefined = state.emojis.get(
+          position + 1
+        );
+
+        if (currentEmoji != undefined && rightEmoji != undefined) {
+          setEmoji(position + 1, currentEmoji);
+          setEmoji(position, rightEmoji);
+        }
+      }
     }
 
     return { shiftEmoji, newEmoji, moveLeft, moveRight };

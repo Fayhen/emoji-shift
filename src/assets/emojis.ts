@@ -247,5 +247,3 @@ export const getCategory = (category: keyof AllEmojis) => {
   const validEmojis = emojis[category]
   return validEmojis;
 }
-
-// export { emojis as default }
