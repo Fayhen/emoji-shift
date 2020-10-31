@@ -23,9 +23,12 @@ export default defineComponent({
     category: {
       type: String,
       required: true
-    },
+    }
   },
-})
+  setup(props) {
+    console.log("from child", props.position);
+  }
+});
 </script>
 
 <style scoped>

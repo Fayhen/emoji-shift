@@ -4,59 +4,38 @@
     <div class="emoji-box-wrapper">
       <div
         class="emoji-wrapper"
-        v-for="[id, emojiData] in state.emojis.entries()"
-        :key="id"
+        v-for="[position, emojiData] in state.emojis.entries()"
+        :key="position"
       >
         <Emoji
           class="emoji-box"
-          :position="emojiData.position"
+          :position="position"
           :codepoint="emojiData.codepoint"
           :label="emojiData.label"
           :category="emojiData.category"
         />
         <div class="button-wrapper">
-          <button @click="shiftEmoji(id, emojiData.position, emojiData.category)">Shift</button>
+          <button @click="shiftEmoji(position, emojiData.category)">
+            Shift
+          </button>
           <button>Remove</button>
-          <button>&#60;</button>
+          <button @click="moveLeft(position)">&#60;</button>
           <span style="font-size: 0.9rem;">Move</span>
-          <button>&#62;</button>
+          <button @click="moveRight(position)">&#62;</button>
         </div>
       </div>
-      <!-- <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div>
-      <div class="emoji-wrapper">
-        <Emoji class="emoji-box" />
-        <button>Shift</button>
-      </div> -->
     </div>
-    <AddEmoji />
+    <AddEmoji @add-emoji="newEmoji($event)" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { AllEmojis } from "@/assets/interfaces";
-import { getCategory } from "@/assets/emojis";
+import { defineComponent, onMounted } from "vue";
+
 import state from "@/store/state";
 import { setDefault, shiftEmoji } from "@/store/methods";
+import { AllEmojis, ActiveEmoji } from "@/assets/interfaces";
+
 import Message from "@/components/Message.vue";
 import Emoji from "@/components/Emoji.vue";
 import AddEmoji from "@/components/AddEmoji.vue";
@@ -74,11 +53,42 @@ export default defineComponent({
     };
   },
   setup() {
-    if (state.emojis.size === 0) {
-      setDefault();
+    onMounted(() => {
+      if (state.emojis.size === 0) {
+        setDefault();
+      }
+      console.log(state.emojis);
+    });
+
+    // const lastPosition = ref(state.emojis.size);
+
+    // function updateLastPosition() {
+    //   lastPosition.value++;
+    //   console.log(lastPosition.value);
+    // }
+
+    function newEmoji(emojiType: keyof AllEmojis) {
+      console.log(emojiType);
+      shiftEmoji(state.emojis.size + 1, emojiType);
     }
-    console.log(state.emojis);
-    return { shiftEmoji }
+
+    function moveLeft(position: number) {
+      console.log("Moving left from position", position);
+      if (position > 1) {
+        const currentEmoji: ActiveEmoji | undefined = state.emojis.get(
+          position
+        );
+        const leftEmoji: ActiveEmoji | undefined = state.emojis.get(
+          position - 1
+        );
+      }
+    }
+
+    function moveRight(position: number) {
+      console.log("Moving right from position", position);
+    }
+
+    return { shiftEmoji, newEmoji, moveLeft, moveRight };
   }
 });
 </script>
@@ -107,9 +117,6 @@ export default defineComponent({
   font-size: 9.5rem;
   border: 1px dashed black;
 }
-/* .add-buttons-wrapper {
-
-} */
 .button-wrapper {
   flex-direction: row;
   justify-content: space-between;

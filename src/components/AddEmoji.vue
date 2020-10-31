@@ -2,12 +2,12 @@
   <div>
     <p>Add an emoji!</p>
     <div class="button-wrapper">
-      <button @click="addEvent('heart')">Add heart</button>
-      <button @click="addEvent('flower')">Add flower</button>
-      <button @click="addEvent('fruit')">Add fruit</button>
-      <button @click="addEvent('animal')">Add animal</button>
-      <button @click="addEvent('food')">Add food</button>
-      <button @click="addEvent('astra')">Add astra</button>
+      <button @click="addEmoji('hearts')">Add heart &#128149;</button>
+      <button @click="addEmoji('flowers')">Add flower &#127801;</button>
+      <button @click="addEmoji('fruits')">Add fruit &#127817;</button>
+      <button @click="addEmoji('animals')">Add animal &#128049;</button>
+      <button @click="addEmoji('food')">Add food &#129360;</button>
+      <button @click="addEmoji('astra')">Add astra &#127776;</button>
     </div>
   </div>
 </template>
@@ -18,11 +18,11 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "AddEmoji",
   methods: {
-    addEvent(type: string) {
-      return console.log("Emitting add event for: ", type)
+    addEmoji(type: string) {
+      this.$emit("add-emoji", type);
     }
   }
-})
+});
 </script>
 
 <style scoped>
