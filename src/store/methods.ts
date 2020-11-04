@@ -45,3 +45,15 @@ export function shiftEmoji(position: number, category: keyof AllEmojis) {
   });
   console.log(state.emojis);
 }
+
+export function removeEmoji(position: number) {
+  for (const key of state.emojis.keys()) {
+    if (key > position) {
+      const emojiData: ActiveEmoji | undefined = state.emojis.get(key);
+      if (emojiData != undefined) {
+        setEmoji(key - 1, emojiData);
+      }
+    }
+  }
+  state.emojis.delete(state.emojis.size - 1);
+}

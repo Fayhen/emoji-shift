@@ -26,7 +26,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    console.log("from child", props.position);
+    console.log("Child in index", props.position);
   }
 });
 </script>

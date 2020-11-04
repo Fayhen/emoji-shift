@@ -18,13 +18,15 @@
           <button @click="shiftEmoji(position, emojiData.category)">
             Shift
           </button>
-          <button>Remove</button>
+          <button @click="removeEmoji(position)">Remove</button>
           <button @click="moveLeft(position)">&#60;</button>
           <span style="font-size: 0.9rem;">Move</span>
           <button @click="moveRight(position)">&#62;</button>
         </div>
       </div>
     </div>
+    <button @click="setDefault()">Start over</button>
+    <button @click="state.emojis.clear()">Clear all</button>
     <AddEmoji @add-emoji="newEmoji($event)" />
   </div>
 </template>
@@ -33,7 +35,7 @@
 import { defineComponent, onMounted } from "vue";
 
 import state from "@/store/state";
-import { setDefault, setEmoji, shiftEmoji } from "@/store/methods";
+import { setDefault, setEmoji, shiftEmoji, removeEmoji } from "@/store/methods";
 import { AllEmojis, ActiveEmoji } from "@/assets/interfaces";
 
 import Message from "@/components/Message.vue";
@@ -99,7 +101,14 @@ export default defineComponent({
       }
     }
 
-    return { shiftEmoji, newEmoji, moveLeft, moveRight };
+    return {
+      shiftEmoji,
+      newEmoji,
+      removeEmoji,
+      setDefault,
+      moveLeft,
+      moveRight
+    };
   }
 });
 </script>
@@ -132,7 +141,7 @@ export default defineComponent({
   flex-direction: row;
   justify-content: space-between;
 }
-.button-wrapper button {
+button {
   margin: 0 2px 0 2px;
 }
 
