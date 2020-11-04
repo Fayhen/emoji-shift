@@ -4,7 +4,8 @@ import { getRandomInt } from "@/utils/randomInt";
 import state from "./state";
 
 export function setDefault() {
-  state.message = "Welcome";
+  state.message1 = "Welcome Товарищ";
+  state.message2 = "So Long";
   state.emojis.clear();
   state.emojis.set(0, {
     codepoint: "0x1F493",

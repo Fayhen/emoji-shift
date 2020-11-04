@@ -2,10 +2,12 @@ import { reactive } from "vue";
 import { ActiveEmoji } from "@/assets/interfaces";
 
 const state = reactive<{
-  message: string;
+  message1: string;
+  message2: string;
   emojis: Map<number, ActiveEmoji>;
 }>({
-  message: "",
+  message1: "",
+  message2: "",
   emojis: new Map<number, ActiveEmoji>()
 });
 

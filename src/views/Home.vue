@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Message :msg="state.message" />
+    <Message :msg="state.message1" style="border: 1px dashed black;"/>
     <div class="emoji-box-wrapper">
       <div
         class="emoji-wrapper"
@@ -15,19 +15,23 @@
           :category="emojiData.category"
         />
         <div class="button-wrapper">
+          <button class="button-left" @click="moveLeft(position)">&#60;</button>
           <button @click="shiftEmoji(position, emojiData.category)">
             Shift
           </button>
           <button @click="removeEmoji(position)">Remove</button>
-          <button @click="moveLeft(position)">&#60;</button>
-          <span style="font-size: 0.9rem;">Move</span>
-          <button @click="moveRight(position)">&#62;</button>
+          <button class="button-right" @click="moveRight(position)">
+            &#62;
+          </button>
         </div>
       </div>
     </div>
-    <button @click="setDefault()">Start over</button>
-    <button @click="state.emojis.clear()">Clear all</button>
-    <AddEmoji @add-emoji="newEmoji($event)" />
+    <Message :msg="state.message2" style="border: 1px dashed black;"/>
+    <button class="button-left" @click="setDefault()">Start over</button>
+    <button class="button-right" @click="state.emojis.clear()">
+      Clear all
+    </button>
+    <AddEmoji @add-emoji="newEmoji($event)" style="border: 1px dashed black;"/>
   </div>
 </template>
 
@@ -116,6 +120,7 @@ export default defineComponent({
 <style scoped>
 .home {
   border: 1px solid black;
+  font-family: "Verdana", "Geneva", sans-serif;
 }
 .emoji-box-wrapper {
   display: flex;
@@ -140,9 +145,31 @@ export default defineComponent({
 .button-wrapper {
   flex-direction: row;
   justify-content: space-between;
+  border: 1px solid black;
 }
 button {
-  margin: 0 2px 0 2px;
+  margin: 0;
+  padding: 0.5em;
+  font-size: 1em;
+  border: 2px solid rgb(216, 185, 255);
+  background-color: rgba(216, 185, 255, 1);
+  transition: 400ms ease;
+}
+button:hover {
+  background-color: rgba(231, 209, 255, 1);
+}
+button:focus {
+  outline: 0;
+}
+.button-left {
+  padding: 0.5em 1em 0.5em 1em;
+  border-top-left-radius: 5em;
+  border-bottom-left-radius: 5em;
+}
+.button-right {
+  padding: 0.5em 1em 0.5em 1em;
+  border-top-right-radius: 5em;
+  border-bottom-right-radius: 5em;
 }
 
 @media only screen and (max-width: 600px) {
