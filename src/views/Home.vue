@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <Message :msg="state.message1" style="border: 1px dashed black;"/>
+    <Message
+      :msg="state.message1"
+      @update:newMessage="state.message1 = $event"
+    />
     <div class="emoji-box-wrapper">
       <div
         class="emoji-wrapper"
@@ -26,12 +29,15 @@
         </div>
       </div>
     </div>
-    <Message :msg="state.message2" style="border: 1px dashed black;"/>
+    <Message
+      :msg="state.message2"
+      @update:newMessage="state.message2 = $event"
+    />
     <button class="button-left" @click="setDefault()">Start over</button>
     <button class="button-right" @click="state.emojis.clear()">
       Clear all
     </button>
-    <AddEmoji @add-emoji="newEmoji($event)" style="border: 1px dashed black;"/>
+    <AddEmoji @add-emoji="newEmoji($event)" style="border: 1px dashed black;" />
   </div>
 </template>
 
@@ -152,11 +158,11 @@ button {
   padding: 0.5em;
   font-size: 1em;
   border: 2px solid rgb(216, 185, 255);
-  background-color: rgba(216, 185, 255, 1);
+  background-color: rgb(216, 185, 255);
   transition: 400ms ease;
 }
 button:hover {
-  background-color: rgba(231, 209, 255, 1);
+  background-color: rgb(231, 209, 255);
 }
 button:focus {
   outline: 0;
