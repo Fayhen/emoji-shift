@@ -1,60 +1,45 @@
-import { getCategory } from "@/assets/emojis";
-import { ActiveEmoji, AllEmojis } from "@/assets/interfaces";
+import { getCategory, retrieveAll } from "@/assets/emojis";
+import { AllEmojis } from "@/assets/interfaces";
+import { ValidCodepoints } from "@/assets/types";
 import { getRandomInt } from "@/utils/randomInt";
 import state from "./state";
 
+export function loadEmojis() {
+  console.log("Calling loadEmojis from methods.ts...");
+  if (state.allEmojis.size > 0) {
+    state.allEmojis.clear();
+  }
+  const allEmojis: AllEmojis = retrieveAll();
+
+  for (const [codepoint, emojiData] of Object.entries(allEmojis)) {
+    state.allEmojis.set(codepoint, emojiData);
+  }
+}
+
 export function setDefault() {
-  state.message1 = "Welcome Товарищ";
+  state.message1 = "Hello there";
   state.message2 = "So Long";
-  state.emojis.clear();
-  state.emojis.set(0, {
-    codepoint: "0x1F493",
-    label: "Beating heart",
-    category: "hearts"
-  });
-  state.emojis.set(1, {
-    codepoint: "0x1F490",
-    label: "Bouquet",
-    category: "flowers"
-  });
-  state.emojis.set(2, {
-    codepoint: "0x1F352",
-    label: "Cherries",
-    category: "fruits"
-  });
-  state.emojis.set(3, {
-    codepoint: "0x1F30C",
-    label: "Milky way",
-    category: "astra"
-  });
+  state.activeEmojis = [];
+  state.activeEmojis.push("0x1F493");
+  state.activeEmojis.push("0x1F490");
+  state.activeEmojis.push("0x1F352");
+  state.activeEmojis.push("0x1F30C");
 }
 
-export function setEmoji(position: number, emojiData: ActiveEmoji) {
-  state.emojis.set(position, emojiData);
+export function setEmoji(position: number, codepoint: ValidCodepoints) {
+  state.activeEmojis.splice(position, 1, codepoint);
 }
 
-export function shiftEmoji(position: number, category: keyof AllEmojis) {
-  const validEmojis = getCategory(category);
-  const index = getRandomInt(0, validEmojis.length);
-  const newEmoji = validEmojis[index];
+export function shiftEmoji(position: number, category: ValidCodepoints) {
+  const codepoints = getCategory(category);
+  const index = getRandomInt(0, codepoints.length);
+  const newEmoji = codepoints[index];
   console.log("newEmoji: ", newEmoji);
 
-  setEmoji(position, {
-    codepoint: newEmoji[0],
-    label: newEmoji[1],
-    category: category
-  });
-  console.log(state.emojis);
+  setEmoji(position, newEmoji);
+  console.log(state.activeEmojis);
 }
 
 export function removeEmoji(position: number) {
-  for (const key of state.emojis.keys()) {
-    if (key > position) {
-      const emojiData: ActiveEmoji | undefined = state.emojis.get(key);
-      if (emojiData != undefined) {
-        setEmoji(key - 1, emojiData);
-      }
-    }
-  }
-  state.emojis.delete(state.emojis.size - 1);
+  state.activeEmojis.splice(position, 1);
 }
