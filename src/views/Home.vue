@@ -7,23 +7,24 @@
     <div class="emoji-box-wrapper">
       <div
         class="emoji-wrapper"
-        v-for="[position, emojiData] in state.emojis.entries()"
-        :key="position"
+        v-for="(codepoint, index) in state.activeEmojis"
+        :key="index"
       >
         <Emoji
           class="emoji-box"
-          :position="position"
-          :codepoint="emojiData.codepoint"
-          :label="emojiData.label"
-          :category="emojiData.category"
+          :position="index"
+          :codepoint="codepoint"
+          :label="state.allEmojis.get(codepoint).label"
         />
         <div class="button-wrapper">
-          <button class="button-left" @click="moveLeft(position)">&#60;</button>
-          <button @click="shiftEmoji(position, emojiData.category)">
+          <button class="button-left" @click="moveLeft(index)">&#60;</button>
+          <button
+            @click="shiftEmoji(index, state.allEmojis.get(codepoint).category)"
+          >
             Shift
           </button>
-          <button @click="removeEmoji(position)">Remove</button>
-          <button class="button-right" @click="moveRight(position)">
+          <button @click="removeEmoji(index)">Remove</button>
+          <button class="button-right" @click="moveRight(index)">
             &#62;
           </button>
         </div>
@@ -34,7 +35,7 @@
       @update:newMessage="state.message2 = $event"
     />
     <button class="button-left" @click="setDefault()">Start over</button>
-    <button class="button-right" @click="state.emojis.clear()">
+    <button class="button-right" @click="state.activeEmojis = []">
       Clear all
     </button>
     <AddEmoji @add-emoji="newEmoji($event)" style="border: 1px dashed black;" />
@@ -45,8 +46,14 @@
 import { defineComponent, onMounted } from "vue";
 
 import state from "@/store/state";
-import { setDefault, setEmoji, shiftEmoji, removeEmoji } from "@/store/methods";
-import { AllEmojis, ActiveEmoji } from "@/assets/interfaces";
+import { ValidCategories } from "@/assets/types";
+import {
+  loadEmojis,
+  setDefault,
+  setEmoji,
+  shiftEmoji,
+  removeEmoji
+} from "@/store/methods";
 
 import Message from "@/components/Message.vue";
 import Emoji from "@/components/Emoji.vue";
@@ -66,26 +73,26 @@ export default defineComponent({
   },
   setup() {
     onMounted(() => {
-      if (state.emojis.size === 0) {
+      if (state.allEmojis.size === 0) {
+        loadEmojis();
+      }
+      if (state.activeEmojis.length === 0) {
         setDefault();
       }
-      console.log(state.emojis);
+      console.log(state.activeEmojis);
+      console.log(`Loaded emojis: ${state.allEmojis.size.toString()} \n`);
     });
 
-    function newEmoji(emojiType: keyof AllEmojis) {
-      console.log(emojiType);
-      shiftEmoji(state.emojis.size, emojiType);
+    function newEmoji(category: ValidCategories) {
+      console.log(category);
+      shiftEmoji(state.activeEmojis.length, category);
     }
 
     function moveLeft(position: number) {
       console.log("Moving left from position", position);
       if (position > 0) {
-        const currentEmoji: ActiveEmoji | undefined = state.emojis.get(
-          position
-        );
-        const leftEmoji: ActiveEmoji | undefined = state.emojis.get(
-          position - 1
-        );
+        const currentEmoji: string | undefined = state.activeEmojis[position];
+        const leftEmoji: string | undefined = state.activeEmojis[position - 1];
 
         if (currentEmoji != undefined && leftEmoji != undefined) {
           setEmoji(position - 1, currentEmoji);
@@ -96,13 +103,9 @@ export default defineComponent({
 
     function moveRight(position: number) {
       console.log("Moving right from position", position);
-      if (position < state.emojis.size) {
-        const currentEmoji: ActiveEmoji | undefined = state.emojis.get(
-          position
-        );
-        const rightEmoji: ActiveEmoji | undefined = state.emojis.get(
-          position + 1
-        );
+      if (position < state.activeEmojis.length) {
+        const currentEmoji: string | undefined = state.activeEmojis[position];
+        const rightEmoji: string | undefined = state.activeEmojis[position + 1];
 
         if (currentEmoji != undefined && rightEmoji != undefined) {
           setEmoji(position + 1, currentEmoji);
@@ -112,6 +115,7 @@ export default defineComponent({
     }
 
     return {
+      onMounted,
       shiftEmoji,
       newEmoji,
       removeEmoji,

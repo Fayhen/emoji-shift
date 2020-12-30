@@ -1,5 +1,7 @@
 <template>
-  <p role="img" :aria-label="label">{{ String.fromCodePoint(codepoint) }}</p>
+  <p role="img" :aria-label="label">
+    {{ String.fromCodePoint(codepoint) }}
+  </p>
 </template>
 
 <script lang="ts">
@@ -17,10 +19,6 @@ export default defineComponent({
       required: true
     },
     label: {
-      type: String,
-      required: true
-    },
-    category: {
       type: String,
       required: true
     }
