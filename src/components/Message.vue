@@ -1,7 +1,9 @@
 <template>
   <div class="message-wrapper">
     <h1>{{ msg }}</h1>
-    <button v-show="!showForm" @click="showForm = true">Edit</button>
+    <button v-show="!showForm && editMode" @click="showForm = true">
+      Edit
+    </button>
   </div>
   <div v-show="showForm">
     <form @submit.prevent="onSubmit($emit)">
@@ -28,12 +30,19 @@ import { defineComponent, ref } from "vue";
 export default defineComponent({
   name: "Message",
   props: {
-    msg: String
+    msg: {
+      type: String,
+      required: true
+    },
+    editMode: {
+      type: Boolean,
+      required: true
+    }
   },
   setup(props, { emit }) {
     const showForm = ref(false);
     const inputWidth = ref("25ch");
-    const newMsg = ref("");
+    const newMsg = ref(props.msg.slice());
 
     function onSubmit() {
       if (newMsg.value !== "") {
