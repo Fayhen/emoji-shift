@@ -22,8 +22,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import state from "@/store/state";
 import { ValidCategories } from "@/assets/types";
+
+import state from "@/store/state";
 import { shiftEmoji, setDefault } from "@/store/methods";
 
 import Message from "@/components/Message.vue";

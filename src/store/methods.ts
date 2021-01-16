@@ -1,4 +1,5 @@
 import { getCategory, retrieveAll } from "@/assets/emojis";
+import { QueryParamsObject } from "@/assets/types";
 import { AllEmojis } from "@/assets/interfaces";
 import { ValidCodepoints } from "@/assets/types";
 import { getRandomInt } from "@/utils/randomInt";
@@ -42,4 +43,18 @@ export function shiftEmoji(position: number, category: ValidCodepoints) {
 
 export function removeEmoji(position: number) {
   state.activeEmojis.splice(position, 1);
+}
+
+export function generateQueryString() {
+  const emojisParam = "?emojis=" + state.activeEmojis.toString();
+  const message1Param = "&msg1=" + state.message1.replace(/\s+/g, "-");
+  const message2Param = "&msg2=" + state.message2.replace(/\s+/g, "-");
+
+  state.queryString = emojisParam + message1Param + message2Param;
+}
+
+export function parseQueryParameters(parameters: QueryParamsObject) {
+  state.message1 = parameters.msg1.replace("-", " ");
+  state.message2 = parameters.msg2.replace("-", " ");
+  state.activeEmojis = parameters.emojis.split(",");
 }
