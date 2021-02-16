@@ -9,6 +9,8 @@
 </template>
 
 <style>
+@import "./assets/css/global.css";
+
 html,
 body {
   height: 100%;

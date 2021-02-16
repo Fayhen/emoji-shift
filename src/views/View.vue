@@ -3,10 +3,10 @@
     <Message :msg="state.message1" :editMode="false" />
     <EmojiWrapper :editMode="false" />
     <Message :msg="state.message2" :editMode="false" />
-    <button>
+    <button class="button-left">
       Edit this card
     </button>
-    <button>
+    <button class="button-right">
       Make my own!
     </button>
   </div>
@@ -16,7 +16,7 @@
 import { defineComponent, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
-import { QueryParamsObject } from "@/assets/types";
+import { QueryParamsObject, isQueryParamsObject } from "@/assets/types";
 
 import state from "@/store/state";
 import {
@@ -43,20 +43,6 @@ export default defineComponent({
   setup() {
     const route = useRoute();
 
-    function isQueryParamsObject(
-      parameters: unknown
-    ): parameters is QueryParamsObject {
-      return typeof (parameters as QueryParamsObject).emojis === "string" &&
-        typeof (parameters as QueryParamsObject).msg1 === "string" &&
-        typeof (parameters as QueryParamsObject).msg2 === "string"
-        ? true
-        : false;
-    }
-
-    // function isQueryParamsObject(parameters: any): parameters is QueryParamsObject {
-    //   return (parameters as QueryParamsObject).emojis !== undefined;
-    // }
-
     onMounted(() => {
       if (state.allEmojis.size === 0) {
         loadEmojis();
@@ -66,10 +52,13 @@ export default defineComponent({
       }
 
       console.log("Accessing route params...");
-
-      const parameters = route.query;
+      const parameters = Object.assign(route.query);
 
       console.log(parameters);
+      console.log(Boolean(parameters));
+      console.log(parameters as QueryParamsObject);
+      console.log((parameters as QueryParamsObject) !== undefined);
+      console.log(isQueryParamsObject(parameters));
 
       if (isQueryParamsObject(parameters)) {
         console.log("Query parameters are OK.");
