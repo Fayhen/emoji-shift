@@ -135,7 +135,7 @@ p {
   justify-content: space-between;
   border: 1px solid black;
 }
-button {
+/* button {
   margin: 0;
   padding: 0.5em;
   font-size: 1em;
@@ -158,5 +158,5 @@ button:focus {
   padding: 0.5em 1em 0.5em 1em;
   border-top-right-radius: 5em;
   border-bottom-right-radius: 5em;
-}
+} */
 </style>

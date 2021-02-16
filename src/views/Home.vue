@@ -11,10 +11,13 @@
       :editMode="true"
       @update:newMessage="state.message2 = $event"
     />
-    <button class="button-left" @click="setDefault()">Start over</button>
-    <button class="button-right" @click="state.activeEmojis = []">
-      Clear all
-    </button>
+    <div style="margin: 0.5em 0 0.5em 0;">
+      <button class="button-left" @click="setDefault()">Restart</button>
+      <button>Save</button>
+      <button class="button-right" @click="state.activeEmojis = []">
+        Clear all
+      </button>
+    </div>
     <AddEmoji @add-emoji="newEmoji($event)" style="border: 1px dashed black;" />
   </div>
 </template>
@@ -22,8 +25,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import state from "@/store/state";
 import { ValidCategories } from "@/assets/types";
+
+import state from "@/store/state";
 import { shiftEmoji, setDefault } from "@/store/methods";
 
 import Message from "@/components/Message.vue";
@@ -58,7 +62,7 @@ export default defineComponent({
   border: 1px solid black;
   font-family: "Verdana", "Geneva", sans-serif;
 }
-button {
+/* button {
   margin: 0;
   padding: 0.5em;
   font-size: 1em;
@@ -81,5 +85,5 @@ button:focus {
   padding: 0.5em 1em 0.5em 1em;
   border-top-right-radius: 5em;
   border-bottom-right-radius: 5em;
-}
+} */
 </style>
