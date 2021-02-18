@@ -15,7 +15,7 @@
       <button class="button-left" @click="setDefault()">Restart</button>
       <button @click="saveState()">Save</button>
       <button @click="loadState()">Load</button>
-      <button class="button-right" @click="state.activeEmojis = []">
+      <button class="button-right" @click="state.stagingEmojis = []">
         Clear all
       </button>
     </div>
