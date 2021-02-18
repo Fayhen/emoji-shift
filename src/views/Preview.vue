@@ -1,9 +1,9 @@
 <template>
   <div class="preview">
     <p>Check your current Emoji Card below:</p>
-    <Message :msg="state.message1" :editMode="false" />
+    <Message :msg="state.stagingMessage1" :editMode="false" />
     <EmojiWrapper :editMode="false" />
-    <Message :msg="state.message2" :editMode="false" />
+    <Message :msg="state.stagingMessage2" :editMode="false" />
   </div>
 </template>
 

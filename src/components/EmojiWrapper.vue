@@ -1,27 +1,51 @@
 <template>
   <div class="emoji-box-wrapper">
-    <div
-      class="emoji-wrapper"
-      v-for="(codepoint, index) in state.activeEmojis"
-      :key="index"
-    >
-      <Emoji
-        class="emoji-box"
-        :position="index"
-        :codepoint="codepoint"
-        :label="state.allEmojis.get(codepoint).label"
-      />
-      <div v-show="editMode" class="button-wrapper">
-        <button class="button-left" @click="moveLeft(index)">&#60;</button>
-        <button
-          @click="shiftEmoji(index, state.allEmojis.get(codepoint).category)"
+    <div v-if="editMode">
+      <!-- Render emojis from the staging state with editing buttons -->
+      <div
+        class="emoji-wrapper"
+        v-for="(codepoint, index) in state.stagingEmojis"
+        :key="index"
+      >
+        <Emoji
+          class="emoji-box"
+          :position="index"
+          :codepoint="codepoint"
+          :label="state.allEmojis.get(codepoint).label"
+        />
+        <div class="button-wrapper">
+          <button class="button-left" @click="moveLeft(index)">&#60;</button>
+          <button
+            @click="shiftEmoji(index, state.allEmojis.get(codepoint).category)"
+          >
+            Shift
+          </button>
+          <button @click="removeEmoji(index)">Remove</button>
+          <button class="button-right" @click="moveRight(index)">
+            &#62;
+          </button>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <!-- Render emojis from the saved state without editing buttons -->
+      <div v-if="state.savedEmojis.length === 0">
+        <p>You haven't saved any emojis to your emoji card yet.</p>
+        <p>You can do so in the editing area. 😊</p>
+      </div>
+      <div v-else>
+        <div
+          class="emoji-wrapper"
+          v-for="(codepoint, index) in state.savedEmojis"
+          :key="index"
         >
-          Shift
-        </button>
-        <button @click="removeEmoji(index)">Remove</button>
-        <button class="button-right" @click="moveRight(index)">
-          &#62;
-        </button>
+          <Emoji
+            class="emoji-box"
+            :position="index"
+            :codepoint="codepoint"
+            :label="state.allEmojis.get(codepoint).label"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -34,9 +58,10 @@ import state from "@/store/state";
 import {
   loadEmojis,
   setDefault,
-  setEmoji,
   shiftEmoji,
-  removeEmoji
+  removeEmoji,
+  moveLeft,
+  moveRight
 } from "@/store/methods";
 
 import Emoji from "@/components/Emoji.vue";
@@ -60,38 +85,12 @@ export default defineComponent({
       if (state.allEmojis.size === 0) {
         loadEmojis();
       }
-      if (state.activeEmojis.length === 0) {
+      if (state.stagingEmojis.length === 0) {
         setDefault();
       }
-      console.log(state.activeEmojis);
+      console.log(state.stagingEmojis);
       console.log(`Loaded emojis: ${state.allEmojis.size.toString()} \n`);
     });
-
-    function moveLeft(position: number) {
-      console.log("Moving left from position", position);
-      if (position > 0) {
-        const currentEmoji: string | undefined = state.activeEmojis[position];
-        const leftEmoji: string | undefined = state.activeEmojis[position - 1];
-
-        if (currentEmoji != undefined && leftEmoji != undefined) {
-          setEmoji(position - 1, currentEmoji);
-          setEmoji(position, leftEmoji);
-        }
-      }
-    }
-
-    function moveRight(position: number) {
-      console.log("Moving right from position", position);
-      if (position < state.activeEmojis.length) {
-        const currentEmoji: string | undefined = state.activeEmojis[position];
-        const rightEmoji: string | undefined = state.activeEmojis[position + 1];
-
-        if (currentEmoji != undefined && rightEmoji != undefined) {
-          setEmoji(position + 1, currentEmoji);
-          setEmoji(position, rightEmoji);
-        }
-      }
-    }
 
     return {
       setDefault,

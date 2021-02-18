@@ -5,16 +5,22 @@ import { ValidCodepoints } from "@/assets/types";
 // allEmojis is category: { codepoint: label }
 const state = reactive<{
   queryString: string;
-  message1: string;
-  message2: string;
+  stagingMessage1: string;
+  stagingMessage2: string;
+  savedMessage1: string;
+  savedMessage2: string;
   allEmojis: Map<string, EmojiData>;
-  activeEmojis: ValidCodepoints[];
+  stagingEmojis: ValidCodepoints[];
+  savedEmojis: ValidCodepoints[];
 }>({
   queryString: "",
-  message1: "",
-  message2: "",
+  stagingMessage1: "",
+  stagingMessage2: "",
+  savedMessage1: "",
+  savedMessage2: "",
   allEmojis: new Map<string, EmojiData>(),
-  activeEmojis: new Array<ValidCodepoints>()
+  stagingEmojis: new Array<ValidCodepoints>(),
+  savedEmojis: new Array<ValidCodepoints>()
 });
 
 export { state as default };
