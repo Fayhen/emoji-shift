@@ -71,10 +71,26 @@ export function moveRight(position: number) {
   }
 }
 
+export function generateQueryString() {
+  const emojisParam = "?emojis=" + state.savedEmojis.toString();
+  const message1Param = "&msg1=" + state.savedMessage1.replace(/\s+/g, "_");
+  const message2Param = "&msg2=" + state.savedMessage2.replace(/\s+/g, "_");
+  
+  state.queryString = emojisParam + message1Param + message2Param;
+}
+
+export function parseQueryParameters(parameters: QueryParamsObject) {
+  state.stagingMessage1 = parameters.msg1.replace(/_/g, " ");
+  state.stagingMessage2 = parameters.msg2.replace(/_/g, " ");
+  state.stagingEmojis = parameters.emojis.split(",");
+}
+
 export function saveState() {
   state.savedMessage1 = state.stagingMessage1;
   state.savedMessage2 = state.stagingMessage2;
   state.savedEmojis = [...state.stagingEmojis];
+
+  generateQueryString();
 }
 
 export function loadState() {
@@ -83,16 +99,15 @@ export function loadState() {
   state.stagingEmojis = [...state.savedEmojis];
 }
 
-export function generateQueryString() {
-  const emojisParam = "?emojis=" + state.savedEmojis.toString();
-  const message1Param = "&msg1=" + state.savedMessage1.replace(/\s+/g, "-");
-  const message2Param = "&msg2=" + state.savedMessage2.replace(/\s+/g, "-");
-
-  state.queryString = emojisParam + message1Param + message2Param;
+export function clearStage() {
+  state.stagingMessage1 = "";
+  state.stagingMessage2 = "";
+  state.stagingEmojis = [];
 }
 
-export function parseQueryParameters(parameters: QueryParamsObject) {
-  state.stagingMessage1 = parameters.msg1.replace("-", " ");
-  state.stagingMessage2 = parameters.msg2.replace("-", " ");
-  state.stagingEmojis = parameters.emojis.split(",");
+export function clearSave() {
+  state.savedMessage1 = "";
+  state.savedMessage2 = "";
+  state.savedEmojis = [];
+  state.queryString = "";
 }

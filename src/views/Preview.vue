@@ -5,6 +5,18 @@
     <EmojiWrapper :editMode="false" />
     <Message :msg="state.savedMessage2" :editMode="false" />
   </div>
+  <div v-if="state.queryString !== ''">
+    <p>Here is the URL for the emoji card above!</p>
+    <p>You can send it to anyone and they'll be able to see it!</p>
+    <div class="codebox">
+      <p>{{ cardLink }}</p>
+    </div>
+    <a :href="cardLink">
+      <button class="pill-button">
+        Let me see it too!
+      </button>
+    </a>
+  </div>
 </template>
 
 <script lang="ts">
@@ -20,6 +32,34 @@ export default defineComponent({
     return {
       state: state
     };
+  },
+  setup() {
+    const currentRoute = window.location.href;
+    const cardLink = currentRoute.replace(
+      "/preview",
+      "/view" + state.queryString
+    );
+
+    return { cardLink };
   }
 });
 </script>
+
+<style scoped>
+button {
+  margin: 1em 0 1em 0;
+}
+.preview {
+  margin-bottom: 2em;
+}
+.codebox {
+  display: block;
+  padding: 0.1em 1em 0.1em 1em;
+  max-width: 98%;
+  background-color: rgb(196, 188, 207);
+}
+.codebox p {
+  font-size: 1.25em;
+  font-family: monospace;
+}
+</style>

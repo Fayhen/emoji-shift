@@ -1,10 +1,41 @@
 <template>
-  <div class="emoji-box-wrapper">
-    <div v-if="editMode">
-      <!-- Render emojis from the staging state with editing buttons -->
+  <div class="outer-wrapper" v-if="editMode">
+    <!-- Render emojis from the staging state with editing buttons -->
+    <div
+      class="box-wrapper"
+      v-for="(codepoint, index) in state.stagingEmojis"
+      :key="index"
+    >
+      <Emoji
+        class="emoji-box"
+        :position="index"
+        :codepoint="codepoint"
+        :label="state.allEmojis.get(codepoint).label"
+      />
+      <div class="button-wrapper">
+        <button class="button-left" @click="moveLeft(index)">&#60;</button>
+        <button
+          @click="shiftEmoji(index, state.allEmojis.get(codepoint).category)"
+        >
+          Shift
+        </button>
+        <button @click="removeEmoji(index)">Remove</button>
+        <button class="button-right" @click="moveRight(index)">
+          &#62;
+        </button>
+      </div>
+    </div>
+  </div>
+  <div v-else>
+    <!-- Render emojis from the saved state without editing buttons -->
+    <div v-if="state.savedEmojis.length === 0">
+      <p>You haven't saved any emojis to your emoji card yet.</p>
+      <p>You can do so in the editing area. 😊</p>
+    </div>
+    <div class="outer-wrapper" v-else>
       <div
-        class="emoji-wrapper"
-        v-for="(codepoint, index) in state.stagingEmojis"
+        class="box-wrapper"
+        v-for="(codepoint, index) in state.savedEmojis"
         :key="index"
       >
         <Emoji
@@ -13,39 +44,6 @@
           :codepoint="codepoint"
           :label="state.allEmojis.get(codepoint).label"
         />
-        <div class="button-wrapper">
-          <button class="button-left" @click="moveLeft(index)">&#60;</button>
-          <button
-            @click="shiftEmoji(index, state.allEmojis.get(codepoint).category)"
-          >
-            Shift
-          </button>
-          <button @click="removeEmoji(index)">Remove</button>
-          <button class="button-right" @click="moveRight(index)">
-            &#62;
-          </button>
-        </div>
-      </div>
-    </div>
-    <div v-else>
-      <!-- Render emojis from the saved state without editing buttons -->
-      <div v-if="state.savedEmojis.length === 0">
-        <p>You haven't saved any emojis to your emoji card yet.</p>
-        <p>You can do so in the editing area. 😊</p>
-      </div>
-      <div v-else>
-        <div
-          class="emoji-wrapper"
-          v-for="(codepoint, index) in state.savedEmojis"
-          :key="index"
-        >
-          <Emoji
-            class="emoji-box"
-            :position="index"
-            :codepoint="codepoint"
-            :label="state.allEmojis.get(codepoint).label"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -109,12 +107,12 @@ p {
   display: block;
   border: 1px dashed orange;
 }
-.emoji-box-wrapper {
+.outer-wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
-.emoji-wrapper {
+.box-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,6 +129,7 @@ p {
 }
 .button-wrapper {
   flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: space-between;
   border: 1px solid black;
 }

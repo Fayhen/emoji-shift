@@ -15,7 +15,7 @@
       <button class="button-left" @click="setDefault()">Restart</button>
       <button @click="saveState()">Save</button>
       <button @click="loadState()">Load</button>
-      <button class="button-right" @click="state.stagingEmojis = []">
+      <button class="button-right" @click="clearStage">
         Clear all
       </button>
     </div>
@@ -29,7 +29,13 @@ import { defineComponent } from "vue";
 import { ValidCategories } from "@/assets/types";
 
 import state from "@/store/state";
-import { shiftEmoji, setDefault, saveState, loadState } from "@/store/methods";
+import {
+  shiftEmoji,
+  setDefault,
+  saveState,
+  loadState,
+  clearStage
+} from "@/store/methods";
 
 import Message from "@/components/Message.vue";
 import EmojiWrapper from "@/components/EmojiWrapper.vue";
@@ -53,7 +59,13 @@ export default defineComponent({
       shiftEmoji(state.stagingEmojis.length, category);
     }
 
-    return { newEmoji, setDefault, saveState, loadState };
+    return {
+      newEmoji,
+      setDefault,
+      saveState,
+      loadState,
+      clearStage
+    };
   }
 });
 </script>
