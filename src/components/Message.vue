@@ -118,11 +118,13 @@ h1 {
   font-family: "Sansita Swashed", cursive;
   margin: 0 0 0.3rem 0;
 }
+
 form {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 /* button {
   display: block;
   max-width: 10rem;
@@ -146,6 +148,7 @@ button:focus {
   padding: 0;
   border: 1px dashed black;
 }
+
 .text-input {
   padding: 0.5em 1em 0.5em 1em;
   border: none;
@@ -154,6 +157,7 @@ button:focus {
   font-size: inherit;
   outline: none;
 }
+
 .submit-button {
   border-top-right-radius: 5em;
   border-bottom-right-radius: 5em;

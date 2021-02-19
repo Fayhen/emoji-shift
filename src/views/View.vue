@@ -4,7 +4,7 @@
     <EmojiWrapper :editMode="false" />
     <Message :msg="state.stagingMessage2" :editMode="false" />
     <div style="margin: 0.5em 0 2em 0;">
-      <button class="button-left" @click="saveAndRedirectToHome">
+      <button class="button-left" @click="redirectToHome">
         Edit this card
       </button>
       <button class="button-right" @click="setDefaultAndRedirectToHome">
@@ -90,8 +90,7 @@ export default defineComponent({
       }
     });
 
-    function saveAndRedirectToHome() {
-      saveState();
+    function redirectToHome() {
       router.push({
         name: "Home"
       });
@@ -107,7 +106,7 @@ export default defineComponent({
 
     return {
       onMounted,
-      saveAndRedirectToHome,
+      redirectToHome,
       setDefaultAndRedirectToHome
     };
   }

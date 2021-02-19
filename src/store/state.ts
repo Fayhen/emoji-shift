@@ -4,6 +4,8 @@ import { ValidCodepoints } from "@/assets/types";
 
 // allEmojis is category: { codepoint: label }
 const state = reactive<{
+  showToast: boolean;
+  toastMsg: string;
   queryString: string;
   stagingMessage1: string;
   stagingMessage2: string;
@@ -13,6 +15,8 @@ const state = reactive<{
   stagingEmojis: ValidCodepoints[];
   savedEmojis: ValidCodepoints[];
 }>({
+  showToast: false,
+  toastMsg: "Default",
   queryString: "",
   stagingMessage1: "",
   stagingMessage2: "",

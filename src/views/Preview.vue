@@ -49,15 +49,18 @@ export default defineComponent({
 button {
   margin: 1em 0 1em 0;
 }
+
 .preview {
   margin-bottom: 2em;
 }
+
 .codebox {
   display: block;
   padding: 0.1em 1em 0.1em 1em;
   max-width: 98%;
   background-color: rgb(196, 188, 207);
 }
+
 .codebox p {
   font-size: 1.25em;
   font-family: monospace;

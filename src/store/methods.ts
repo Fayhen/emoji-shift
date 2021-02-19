@@ -5,6 +5,15 @@ import { ValidCodepoints } from "@/assets/types";
 import { getRandomInt } from "@/utils/randomInt";
 import state from "./state";
 
+export function showToast(toastMsg: string) {
+  state.toastMsg = toastMsg;
+  state.showToast = true;
+  setTimeout(() => {
+    state.showToast = false;
+    // state.toastMsg = "Default";
+  }, 3000);
+}
+
 export function loadEmojis() {
   console.log("Calling loadEmojis from methods.ts...");
   if (state.allEmojis.size > 0) {
@@ -75,7 +84,7 @@ export function generateQueryString() {
   const emojisParam = "?emojis=" + state.savedEmojis.toString();
   const message1Param = "&msg1=" + state.savedMessage1.replace(/\s+/g, "_");
   const message2Param = "&msg2=" + state.savedMessage2.replace(/\s+/g, "_");
-  
+
   state.queryString = emojisParam + message1Param + message2Param;
 }
 
@@ -91,12 +100,19 @@ export function saveState() {
   state.savedEmojis = [...state.stagingEmojis];
 
   generateQueryString();
+  showToast("Card saved!");
 }
 
 export function loadState() {
-  state.stagingMessage1 = state.savedMessage1;
-  state.stagingMessage2 = state.savedMessage2;
-  state.stagingEmojis = [...state.savedEmojis];
+  if (state.savedEmojis.length === 0) {
+    showToast("You haven't saved an emoji card yet.");
+  } else {
+    state.stagingMessage1 = state.savedMessage1;
+    state.stagingMessage2 = state.savedMessage2;
+    state.stagingEmojis = [...state.savedEmojis];
+
+    showToast("Card loaded!");
+  }
 }
 
 export function clearStage() {

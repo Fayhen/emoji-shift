@@ -12,14 +12,20 @@
       @update:newMessage="state.stagingMessage2 = $event"
     />
     <div style="margin: 0.5em 0 0.5em 0;">
-      <button class="button-left" @click="setDefault()">Restart</button>
-      <button @click="saveState()">Save</button>
-      <button @click="loadState()">Load</button>
+      <button class="button-left" @click="setDefault()">
+        Restart
+      </button>
+      <button @click="saveState()">
+        Save
+      </button>
+      <button @click="loadState()">
+        Load
+      </button>
       <button class="button-right" @click="clearStage">
         Clear all
       </button>
     </div>
-    <AddEmoji @add-emoji="newEmoji($event)" style="border: 1px dashed black;" />
+    <AddEmoji @addEmoji="newEmoji($event)" style="border: 1px dashed black;" />
   </div>
 </template>
 
@@ -30,6 +36,7 @@ import { ValidCategories } from "@/assets/types";
 
 import state from "@/store/state";
 import {
+  showToast,
   shiftEmoji,
   setDefault,
   saveState,
@@ -60,6 +67,7 @@ export default defineComponent({
     }
 
     return {
+      showToast,
       newEmoji,
       setDefault,
       saveState,

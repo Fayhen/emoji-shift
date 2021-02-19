@@ -107,11 +107,13 @@ p {
   display: block;
   border: 1px dashed orange;
 }
+
 .outer-wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .box-wrapper {
   display: flex;
   flex-direction: column;
@@ -120,6 +122,7 @@ p {
   margin-bottom: 1rem;
   border: 1px solid black;
 }
+
 .emoji-box {
   width: 12rem;
   height: 12rem;
@@ -127,6 +130,7 @@ p {
   font-size: 9.5rem;
   border: 1px dashed black;
 }
+
 .button-wrapper {
   flex-direction: row;
   flex-wrap: nowrap;
