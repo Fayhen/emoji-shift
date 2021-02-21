@@ -19,7 +19,7 @@ export default defineComponent({
   name: "AddEmoji",
   methods: {
     addEmoji(type: string) {
-      this.$emit("add-emoji", type);
+      this.$emit("addEmoji", type);
     }
   }
 });
@@ -33,6 +33,7 @@ export default defineComponent({
   flex-wrap: wrap;
   border: 1px dashed black;
 }
+
 button {
   min-width: 10rem;
   margin: 2px;
@@ -43,9 +44,11 @@ button {
   background-color: rgb(216, 185, 255);
   transition: 400ms ease;
 }
+
 button:hover {
   background-color: rgb(231, 209, 255);
 }
+
 button:focus {
   outline: 0;
 }

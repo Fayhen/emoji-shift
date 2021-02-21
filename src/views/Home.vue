@@ -1,24 +1,31 @@
 <template>
   <div class="home">
     <Message
-      :msg="state.message1"
+      :msg="state.stagingMessage1"
       :editMode="true"
-      @update:newMessage="state.message1 = $event"
+      @update:newMessage="state.stagingMessage1 = $event"
     />
     <EmojiWrapper :editMode="true" />
     <Message
-      :msg="state.message2"
+      :msg="state.stagingMessage2"
       :editMode="true"
-      @update:newMessage="state.message2 = $event"
+      @update:newMessage="state.stagingMessage2 = $event"
     />
     <div style="margin: 0.5em 0 0.5em 0;">
-      <button class="button-left" @click="setDefault()">Restart</button>
-      <button>Save</button>
-      <button class="button-right" @click="state.activeEmojis = []">
+      <button class="button-left" @click="setDefault()">
+        Restart
+      </button>
+      <button @click="saveState()">
+        Save
+      </button>
+      <button @click="loadState()">
+        Load
+      </button>
+      <button class="button-right" @click="clearStage">
         Clear all
       </button>
     </div>
-    <AddEmoji @add-emoji="newEmoji($event)" style="border: 1px dashed black;" />
+    <AddEmoji @addEmoji="newEmoji($event)" style="border: 1px dashed black;" />
   </div>
 </template>
 
@@ -28,7 +35,14 @@ import { defineComponent } from "vue";
 import { ValidCategories } from "@/assets/types";
 
 import state from "@/store/state";
-import { shiftEmoji, setDefault } from "@/store/methods";
+import {
+  showToast,
+  shiftEmoji,
+  setDefault,
+  saveState,
+  loadState,
+  clearStage
+} from "@/store/methods";
 
 import Message from "@/components/Message.vue";
 import EmojiWrapper from "@/components/EmojiWrapper.vue";
@@ -49,10 +63,17 @@ export default defineComponent({
   setup() {
     function newEmoji(category: ValidCategories) {
       console.log(category);
-      shiftEmoji(state.activeEmojis.length, category);
+      shiftEmoji(state.stagingEmojis.length, category);
     }
 
-    return { newEmoji, setDefault };
+    return {
+      showToast,
+      newEmoji,
+      setDefault,
+      saveState,
+      loadState,
+      clearStage
+    };
   }
 });
 </script>

@@ -1,8 +1,8 @@
 <template>
+  <Toast />
   <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/preview">Preview</router-link> |
-    <router-link to="/view">Done!</router-link> |
     <router-link to="/about">About</router-link>
   </div>
   <router-view />
@@ -16,6 +16,7 @@ body {
   height: 100%;
   background-color: rgb(230, 215, 255);
 }
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

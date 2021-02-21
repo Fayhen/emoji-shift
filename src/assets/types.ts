@@ -14,15 +14,18 @@ export type QueryParamsObject = {
 
 export function isQueryParamsObject(
   obj: StringMap,
-  strict: boolean = false
+  strict = false
 ): obj is QueryParamsObject {
   const requiredParams = ["emojis", "msg1", "msg2"];
   const objKeys = Object.keys(obj);
   return (
-    requiredParams.every((param) => {
+    requiredParams.every(param => {
       return objKeys.includes(param) && typeof obj[param] === "string";
-    }) && (
-      strict ? objKeys.every((key) => {requiredParams.includes(key)}) : true
-    )
+    }) &&
+    (strict
+      ? objKeys.every(key => {
+          requiredParams.includes(key);
+        })
+      : true)
   );
 }

@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <Message :msg="state.message1" :editMode="false" />
+    <Message :msg="state.stagingMessage1" :editMode="false" />
     <EmojiWrapper :editMode="false" />
-    <Message :msg="state.message2" :editMode="false" />
+    <Message :msg="state.stagingMessage2" :editMode="false" />
     <div style="margin: 0.5em 0 2em 0;">
-      <button class="button-left" @click="saveAndRedirectToHome">
+      <button class="button-left" @click="redirectToHome">
         Edit this card
       </button>
       <button class="button-right" @click="setDefaultAndRedirectToHome">
@@ -25,7 +25,9 @@ import {
   loadEmojis,
   setDefault,
   generateQueryString,
-  parseQueryParameters
+  parseQueryParameters,
+  saveState,
+  clearSave
 } from "@/store/methods";
 
 import Message from "@/components/Message.vue";
@@ -63,9 +65,10 @@ export default defineComponent({
       if (isQueryParamsObject(parameters)) {
         try {
           console.log("Query parameters are OK.");
-          // Load state from the query string:
+          // Load and save state from the query string
           parseQueryParameters(parameters);
-          // Recreate query string from loaded state:
+          saveState();
+          // Recreate query string from the saved state
           generateQueryString();
           console.log(state.queryString);
         } catch (error) {
@@ -87,18 +90,14 @@ export default defineComponent({
       }
     });
 
-    function saveAndRedirectToHome() {
-      /*
-      Add the accessed card to the saved state when it is implemented.
-      Currently the card is already added to the staging state if the
-      query parameters are correctly parsed.
-      */
+    function redirectToHome() {
       router.push({
         name: "Home"
       });
     }
 
     function setDefaultAndRedirectToHome() {
+      clearSave();
       setDefault();
       router.push({
         name: "Home"
@@ -107,7 +106,7 @@ export default defineComponent({
 
     return {
       onMounted,
-      saveAndRedirectToHome,
+      redirectToHome,
       setDefaultAndRedirectToHome
     };
   }
