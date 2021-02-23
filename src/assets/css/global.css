@@ -6,6 +6,12 @@ button {
   background-color: rgb(216, 185, 255);
   transition: 400ms ease;
   cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 button:hover {

@@ -5,12 +5,17 @@
       class="box-wrapper"
       v-for="(codepoint, index) in state.stagingEmojis"
       :key="index"
+      @drop.prevent="onDrop($event, index)"
+      @dragenter.prevent
+      @dragover.prevent
     >
       <Emoji
         class="emoji-box"
         :position="index"
         :codepoint="codepoint"
         :label="state.allEmojis.get(codepoint).label"
+        draggable
+        @dragstart="startDrag($event, index)"
       />
       <div class="button-wrapper">
         <button class="button-left" @click="moveLeft(index)">&#60;</button>
@@ -59,7 +64,8 @@ import {
   shiftEmoji,
   removeEmoji,
   moveLeft,
-  moveRight
+  moveRight,
+  insertAtIndex
 } from "@/store/methods";
 
 import Emoji from "@/components/Emoji.vue";
@@ -90,7 +96,42 @@ export default defineComponent({
       console.log(`Loaded emojis: ${state.allEmojis.size.toString()} \n`);
     });
 
+    function startDrag(evt: DragEvent, lastIndex: string) {
+      console.log("startDrag");
+      if (evt.dataTransfer !== null) {
+        evt.dataTransfer.dropEffect = "move";
+        evt.dataTransfer.effectAllowed = "move";
+        evt.dataTransfer.setData("lastIndex", lastIndex);
+        console.log(evt);
+        console.log(DataTransfer);
+        console.log(lastIndex);
+      } else {
+        throw new Error(
+          "Missing DataTranfer object on starting emoji drag event."
+        );
+      }
+    }
+
+    function onDrop(evt: DragEvent, newIndex: string) {
+      console.log("onDrop");
+      if (evt.dataTransfer !== null) {
+        const lastIndex = parseInt(evt.dataTransfer.getData("lastIndex"));
+        const emoji = state.stagingEmojis[lastIndex];
+        console.log(lastIndex);
+        console.log(emoji);
+
+        removeEmoji(lastIndex);
+        insertAtIndex(parseInt(newIndex), emoji);
+      } else {
+        throw new Error(
+          "Missing DataTranfer object on finishing emoji drag event."
+        );
+      }
+    }
+
     return {
+      startDrag,
+      onDrop,
       setDefault,
       shiftEmoji,
       removeEmoji,
@@ -129,6 +170,11 @@ p {
   margin: 1rem;
   font-size: 9.5rem;
   border: 1px dashed black;
+  cursor: grab;
+}
+
+.emoji-box:active {
+  cursor: grabbing;
 }
 
 .button-wrapper {

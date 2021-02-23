@@ -10,7 +10,6 @@ export function showToast(toastMsg: string) {
   state.showToast = true;
   setTimeout(() => {
     state.showToast = false;
-    // state.toastMsg = "Default";
   }, 3000);
 }
 
@@ -78,6 +77,10 @@ export function moveRight(position: number) {
       setEmoji(position, rightEmoji);
     }
   }
+}
+
+export function insertAtIndex(index: number, emoji: ValidCodepoints) {
+  state.stagingEmojis.splice(index, 0, emoji);
 }
 
 export function generateQueryString() {
