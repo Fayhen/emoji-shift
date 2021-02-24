@@ -1,5 +1,5 @@
 <template>
-  <div class="outer-wrapper" v-if="editMode">
+  <div class="outer-wrapper unselectable" v-if="editMode">
     <!-- Render emojis from the staging state with editing buttons -->
     <div
       class="box-wrapper"
@@ -14,19 +14,26 @@
         :position="index"
         :codepoint="codepoint"
         :label="state.allEmojis.get(codepoint).label"
-        draggable
+        draggable="true"
         @dragstart="startDrag($event, index)"
       />
       <div class="button-wrapper">
-        <button class="button-left" @click="moveLeft(index)">&#60;</button>
+        <button class="button-left" @click="moveLeft(index)">
+          <span class="material-icons">keyboard_arrow_left</span>
+        </button>
         <button
           @click="shiftEmoji(index, state.allEmojis.get(codepoint).category)"
         >
-          Shift
+          <span class="material-icons">auto_awesome</span>
         </button>
-        <button @click="removeEmoji(index)">Remove</button>
+        <button @click="makeCopy(index, codepoint)">
+          <span class="material-icons">content_copy</span>
+        </button>
+        <button @click="removeEmoji(index)">
+          <span class="material-icons">delete</span>
+        </button>
         <button class="button-right" @click="moveRight(index)">
-          &#62;
+          <span class="material-icons">keyboard_arrow_right</span>
         </button>
       </div>
     </div>
@@ -37,7 +44,7 @@
       <p>You haven't saved any emojis to your emoji card yet.</p>
       <p>You can do so in the editing area. 😊</p>
     </div>
-    <div class="outer-wrapper" v-else>
+    <div class="outer-wrapper unselectable" v-else>
       <div
         class="box-wrapper"
         v-for="(codepoint, index) in state.savedEmojis"
@@ -65,7 +72,8 @@ import {
   removeEmoji,
   moveLeft,
   moveRight,
-  insertAtIndex
+  insertAtIndex,
+  makeCopy
 } from "@/store/methods";
 
 import Emoji from "@/components/Emoji.vue";
@@ -137,7 +145,8 @@ export default defineComponent({
       removeEmoji,
       onMounted,
       moveLeft,
-      moveRight
+      moveRight,
+      makeCopy
     };
   }
 });
@@ -182,29 +191,10 @@ p {
   flex-wrap: nowrap;
   justify-content: space-between;
   border: 1px solid black;
+  font-size: 12px;
 }
-/* button {
-  margin: 0;
-  padding: 0.5em;
-  font-size: 1em;
-  border: 2px solid rgb(216, 185, 255);
-  background-color: rgb(216, 185, 255);
-  transition: 400ms ease;
+
+.button-wrapper span {
+  color: rgba(0, 0, 0, 0.76);
 }
-button:hover {
-  background-color: rgb(231, 209, 255);
-}
-button:focus {
-  outline: 0;
-}
-.button-left {
-  padding: 0.5em 1em 0.5em 1em;
-  border-top-left-radius: 5em;
-  border-bottom-left-radius: 5em;
-}
-.button-right {
-  padding: 0.5em 1em 0.5em 1em;
-  border-top-right-radius: 5em;
-  border-bottom-right-radius: 5em;
-} */
 </style>

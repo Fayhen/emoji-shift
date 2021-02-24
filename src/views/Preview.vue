@@ -7,7 +7,7 @@
   </div>
   <div v-if="state.queryString !== ''">
     <p>Here is the URL for the emoji card above!</p>
-    <p>You can send it to anyone and they'll be able to see it!</p>
+    <p>Share it for people to see!</p>
     <div class="codebox">
       <p>{{ cardLink }}</p>
     </div>
@@ -57,7 +57,8 @@ button {
 .codebox {
   display: block;
   padding: 0.1em 1em 0.1em 1em;
-  max-width: 98%;
+  max-width: 80vw;
+  word-wrap: break-word;
   background-color: rgb(196, 188, 207);
 }
 

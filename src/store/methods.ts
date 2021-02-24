@@ -83,6 +83,10 @@ export function insertAtIndex(index: number, emoji: ValidCodepoints) {
   state.stagingEmojis.splice(index, 0, emoji);
 }
 
+export function makeCopy(index: number, emoji: ValidCodepoints) {
+  insertAtIndex(index, emoji);
+}
+
 export function generateQueryString() {
   const emojisParam = "?emojis=" + state.savedEmojis.toString();
   const message1Param = "&msg1=" + state.savedMessage1.replace(/\s+/g, "_");
