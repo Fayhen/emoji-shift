@@ -5,7 +5,7 @@
     <EmojiWrapper :editMode="false" />
     <Message :msg="state.savedMessage2" :editMode="false" />
   </div>
-  <div v-if="state.queryString !== ''">
+  <div v-if="state.queryString !== '' && state.savedEmojis.length > 0">
     <p>Here is the URL for the emoji card above!</p>
     <p>Share it for people to see!</p>
     <div class="codebox">
@@ -60,6 +60,12 @@ button {
   max-width: 80vw;
   word-wrap: break-word;
   background-color: rgb(196, 188, 207);
+  -webkit-touch-callout: all;
+  -webkit-user-select: all;
+  -khtml-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
 }
 
 .codebox p {

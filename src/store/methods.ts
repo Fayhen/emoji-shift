@@ -79,12 +79,12 @@ export function makeCopy(index: number, emoji: ValidCodepoints) {
   insertAtIndex(index, emoji);
 }
 
-export function randomEmojis() {
+export function randomEmojis(amount = 4) {
   const categories: ValidCategories[] = categoryNames();
   let randomIndex = 0;
   state.stagingEmojis = [];
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < amount; i++) {
     randomIndex = getRandomInt(0, categories.length - 1);
     shiftEmoji(i, categories[randomIndex]);
   }

@@ -158,6 +158,10 @@ p {
   border: 1px dashed orange;
 }
 
+button {
+  font-size: 1em;
+}
+
 .outer-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -169,7 +173,7 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin: 0 0.25rem 1rem 0.25rem;
   border: 1px solid black;
 }
 

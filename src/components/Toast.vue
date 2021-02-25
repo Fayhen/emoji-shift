@@ -28,9 +28,10 @@ export default defineComponent({
   margin-left: auto;
   margin-right: auto;
   padding: 0.5em;
+  border: 1px solid rgb(216, 185, 255);
+  background-color: rgb(224, 201, 252);
   border-radius: 5rem;
   text-align: center;
-  background-color: rgb(216, 185, 255);
   /* transition: 600ms ease; */
 }
 

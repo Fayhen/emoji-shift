@@ -11,19 +11,59 @@
       :editMode="true"
       @update:newMessage="state.stagingMessage2 = $event"
     />
-    <div style="margin: 0.5em 0 0.5em 0;">
-      <button class="button-left" @click="setDefault()">
-        Restart
+    <div style="margin: 1.5em 0 0.5em 0;">
+      <!-- eslint-disable prettier/prettier -->
+      <button
+        class="button-left-dynamic"
+        title="Restart"
+        @click="setDefault()"
+      >
+        <span></span>Restart
+        <span class="material-icons">
+          restart_alt
+        </span>
       </button>
-      <button @click="saveState(), showToast('Card saved!')">
+      <button
+        class="button-dynamic"
+        title="Randomize all"
+        @click="randomEmojis(state.stagingEmojis.length)"
+      >
+        Randomize
+        <span class="material-icons">
+          category
+        </span>
+      </button>
+      <button
+        class="button-dynamic"
+        title="Save"
+        @click="saveState(), showToast('Card saved!')"
+      >
         Save
+        <span class="material-icons">
+          save
+        </span>
       </button>
-      <button @click="loadState()">
+      <button
+        class="button-dynamic"
+        title="Load"
+        @click="loadState()"
+      >
         Load
+        <span class="material-icons">
+          restore
+        </span>
       </button>
-      <button class="button-right" @click="clearStage">
+      <button
+        class="button-right-dynamic"
+        title="Clear all"
+        @click="clearStage"
+      >
         Clear all
+        <span class="material-icons">
+          clear
+        </span>
       </button>
+      <!-- eslint-enable prettier/prettier -->
     </div>
     <AddEmoji @addEmoji="newEmoji($event)" style="border: 1px dashed black;" />
   </div>
@@ -38,6 +78,7 @@ import state from "@/store/state";
 import {
   showToast,
   shiftEmoji,
+  randomEmojis,
   setDefault,
   saveState,
   loadState,
@@ -69,6 +110,7 @@ export default defineComponent({
     return {
       showToast,
       newEmoji,
+      randomEmojis,
       setDefault,
       saveState,
       loadState,
@@ -79,8 +121,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
+span {
+  margin-left: 0.25em;
+  margin-right: 0.25em;
+}
+
 .home {
   border: 1px solid black;
   font-family: "Verdana", "Geneva", sans-serif;
+}
+
+.material-icons {
+  font-size: 18px;
 }
 </style>
