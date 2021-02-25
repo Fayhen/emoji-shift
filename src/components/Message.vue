@@ -125,22 +125,6 @@ form {
   align-items: center;
 }
 
-/* button {
-  display: block;
-  max-width: 10rem;
-  padding: 0.5em 1em 0.5em 1em;
-  border-radius: 5rem;
-  font-size: inherit;
-  border: 1px solid rgb(216, 185, 255);
-  background-color: rgb(216, 185, 255);
-  transition: 400ms ease;
-}
-button:hover {
-  background-color: rgb(231, 209, 255);
-}
-button:focus {
-  outline: none;
-} */
 .message-wrapper {
   display: flex;
   flex-direction: column;

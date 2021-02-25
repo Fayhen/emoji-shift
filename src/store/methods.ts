@@ -1,7 +1,10 @@
-import { getCategory, retrieveAll } from "@/assets/emojis";
-import { QueryParamsObject } from "@/assets/types";
+import { categoryNames, getCategory, retrieveAll } from "@/assets/emojis";
 import { AllEmojis } from "@/assets/interfaces";
-import { ValidCodepoints } from "@/assets/types";
+import {
+  ValidCodepoints,
+  ValidCategories,
+  QueryParamsObject
+} from "@/assets/types";
 import { getRandomInt } from "@/utils/randomInt";
 import state from "./state";
 
@@ -14,7 +17,6 @@ export function showToast(toastMsg: string) {
 }
 
 export function loadEmojis() {
-  console.log("Calling loadEmojis from methods.ts...");
   if (state.allEmojis.size > 0) {
     state.allEmojis.clear();
   }
@@ -25,21 +27,11 @@ export function loadEmojis() {
   }
 }
 
-export function setDefault() {
-  state.stagingMessage1 = "Hello there";
-  state.stagingMessage2 = "So Long";
-  state.stagingEmojis = [];
-  state.stagingEmojis.push("0x1F493");
-  state.stagingEmojis.push("0x1F490");
-  state.stagingEmojis.push("0x1F352");
-  state.stagingEmojis.push("0x1F30C");
-}
-
 export function setEmoji(position: number, codepoint: ValidCodepoints) {
   state.stagingEmojis.splice(position, 1, codepoint);
 }
 
-export function shiftEmoji(position: number, category: ValidCodepoints) {
+export function shiftEmoji(position: number, category: ValidCategories) {
   const codepoints = getCategory(category);
   const index = getRandomInt(0, codepoints.length);
   const newEmoji = codepoints[index];
@@ -87,6 +79,26 @@ export function makeCopy(index: number, emoji: ValidCodepoints) {
   insertAtIndex(index, emoji);
 }
 
+export function randomEmojis() {
+  const categories: ValidCategories[] = categoryNames();
+  let randomIndex = 0;
+  state.stagingEmojis = [];
+
+  for (let i = 0; i < 4; i++) {
+    randomIndex = getRandomInt(0, categories.length - 1);
+    shiftEmoji(i, categories[randomIndex]);
+  }
+}
+
+export function setDefault() {
+  if (state.allEmojis.size === 0) {
+    loadEmojis();
+  }
+  state.stagingMessage1 = "Welcome to emoji-shift!";
+  state.stagingMessage2 = "Make your own emoji card!";
+  randomEmojis();
+}
+
 export function generateQueryString() {
   const emojisParam = "?emojis=" + state.savedEmojis.toString();
   const message1Param = "&msg1=" + state.savedMessage1.replace(/\s+/g, "_");
@@ -98,7 +110,18 @@ export function generateQueryString() {
 export function parseQueryParameters(parameters: QueryParamsObject) {
   state.stagingMessage1 = parameters.msg1.replace(/_/g, " ");
   state.stagingMessage2 = parameters.msg2.replace(/_/g, " ");
-  state.stagingEmojis = parameters.emojis.split(",");
+
+  const validCodepoints: ValidCodepoints[] = Array.from(state.allEmojis.keys());
+  const passedCodepoints: ValidCodepoints[] = [];
+  const rawCodepoints: string[] = parameters.emojis.split(",");
+
+  for (const codepoint of rawCodepoints) {
+    if (validCodepoints.includes(codepoint)) {
+      passedCodepoints.push(codepoint);
+    }
+  }
+
+  state.stagingEmojis = passedCodepoints;
 }
 
 export function saveState() {
@@ -107,7 +130,6 @@ export function saveState() {
   state.savedEmojis = [...state.stagingEmojis];
 
   generateQueryString();
-  showToast("Card saved!");
 }
 
 export function loadState() {

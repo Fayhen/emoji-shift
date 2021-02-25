@@ -250,12 +250,18 @@ export const getCategory = (category: ValidCategories) => {
   return codepoints;
 };
 
+export const categoryNames = () => {
+  const categories: ValidCategories[] = Object.keys(emojis);
+  console.log(categories);
+  return categories;
+};
+
 // Retrieve all emojis In store-ready structure
 export const retrieveAll = () => {
   const allEmojis: AllEmojis = {};
 
   // Get existing categories
-  const categories: ValidCodepoints[] = Object.keys(emojis);
+  const categories: ValidCodepoints[] = categoryNames();
 
   for (const category of categories) {
     // Retrieve emoji codepoints for each category

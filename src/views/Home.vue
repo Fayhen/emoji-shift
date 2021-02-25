@@ -15,7 +15,7 @@
       <button class="button-left" @click="setDefault()">
         Restart
       </button>
-      <button @click="saveState()">
+      <button @click="saveState(), showToast('Card saved!')">
         Save
       </button>
       <button @click="loadState()">
@@ -83,28 +83,4 @@ export default defineComponent({
   border: 1px solid black;
   font-family: "Verdana", "Geneva", sans-serif;
 }
-/* button {
-  margin: 0;
-  padding: 0.5em;
-  font-size: 1em;
-  border: 2px solid rgb(216, 185, 255);
-  background-color: rgb(216, 185, 255);
-  transition: 400ms ease;
-}
-button:hover {
-  background-color: rgb(231, 209, 255);
-}
-button:focus {
-  outline: 0;
-}
-.button-left {
-  padding: 0.5em 1em 0.5em 1em;
-  border-top-left-radius: 5em;
-  border-bottom-left-radius: 5em;
-}
-.button-right {
-  padding: 0.5em 1em 0.5em 1em;
-  border-top-right-radius: 5em;
-  border-bottom-right-radius: 5em;
-} */
 </style>
