@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Add an emoji!</p>
+    <p>Add Emojis!</p>
     <div class="button-wrapper">
       <button @click="addEmoji('hearts')">Add heart &#128149;</button>
       <button @click="addEmoji('flowers')">Add flower &#127801;</button>
@@ -31,10 +31,17 @@ export default defineComponent({
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
+  margin-bottom: 1em;
   border: 1px dashed black;
 }
 
 button {
+  min-width: 12rem;
+  border-radius: 5rem;
+  margin: 0 0.5em 0.5em 0.5em;
+}
+
+/* button {
   min-width: 10rem;
   margin: 2px;
   padding: 0.5em;
@@ -51,5 +58,5 @@ button:hover {
 
 button:focus {
   outline: 0;
-}
+} */
 </style>

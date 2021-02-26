@@ -5,7 +5,7 @@
       <p>No message here.</p>
       <p>This area will not show up on your emoji card.</p>
       <button class="pill-button" v-show="!showForm" @click="showForm = true">
-        Add a message!
+        Add message!
       </button>
     </div>
     <!-- Display message and edit controls if message exists and editMode is true -->
@@ -18,7 +18,7 @@
             v-show="!showForm"
             @click="showForm = true"
           >
-            Edit
+            Edit message
           </button>
           <button
             class="button-right"
@@ -49,7 +49,7 @@
     </div>
   </div>
   <div v-else>
-    <!-- Don't render messages is none is set -->
+    <!-- Hide message if none is set -->
     <div v-if="msg !== ''">
       <h1>{{ msg }}</h1>
     </div>
@@ -125,22 +125,6 @@ form {
   align-items: center;
 }
 
-/* button {
-  display: block;
-  max-width: 10rem;
-  padding: 0.5em 1em 0.5em 1em;
-  border-radius: 5rem;
-  font-size: inherit;
-  border: 1px solid rgb(216, 185, 255);
-  background-color: rgb(216, 185, 255);
-  transition: 400ms ease;
-}
-button:hover {
-  background-color: rgb(231, 209, 255);
-}
-button:focus {
-  outline: none;
-} */
 .message-wrapper {
   display: flex;
   flex-direction: column;

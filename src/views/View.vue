@@ -1,28 +1,34 @@
 <template>
-  <div class="home">
-    <Message :msg="state.stagingMessage1" :editMode="false" />
+  <div v-if="loading">
+    <span>⏲️ Loading card...</span>
+  </div>
+  <div v-else>
+    <Message :msg="state.savedMessage1" :editMode="false" />
     <EmojiWrapper :editMode="false" />
-    <Message :msg="state.stagingMessage2" :editMode="false" />
-    <div style="margin: 0.5em 0 2em 0;">
-      <button class="button-left" @click="redirectToHome">
-        Edit this card
+    <Message :msg="state.savedMessage2" :editMode="false" />
+    <div style="margin: 3em 0 2em 0;">
+      <p>Liked this card?</p>
+      <button class="button-left-dynamic" @click="redirectToHome">
+        Edit it! 🎨
       </button>
-      <button class="button-right" @click="setDefaultAndRedirectToHome">
-        Make my own!
+      <button class="button-right-dynamic" @click="setDefaultAndRedirectToHome">
+        Make your own! 💡
       </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { QueryParamsObject, isQueryParamsObject } from "@/assets/types";
 
 import state from "@/store/state";
 import {
+  showToast,
   loadEmojis,
+  randomEmojis,
   setDefault,
   generateQueryString,
   parseQueryParameters,
@@ -47,6 +53,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
+    const loading = ref(true);
 
     onMounted(() => {
       if (state.allEmojis.size === 0) {
@@ -63,29 +70,71 @@ export default defineComponent({
       console.log(isQueryParamsObject(parameters));
 
       if (isQueryParamsObject(parameters)) {
+        console.log("Query parameters are OK.");
         try {
-          console.log("Query parameters are OK.");
-          // Load and save state from the query string
+          // Parse data from the URL and add it to the staging state
           parseQueryParameters(parameters);
-          saveState();
-          // Recreate query string from the saved state
-          generateQueryString();
+          console.log(state.stagingEmojis);
           console.log(state.queryString);
+
+          // Check if the card had any emojis
+          if (state.stagingEmojis.length > 0 && state.stagingEmojis[0] !== "") {
+            // Add data to the saved state so EmojiWrapper can render
+            // the card outside edit mode
+            saveState();
+
+            // Recreate the query string using the new saved state
+            generateQueryString();
+
+            // Exit loading and give feedback to the user
+            loading.value = false;
+            showToast("You received an Emoji Card!");
+          } else {
+            // If no emojis were given, make a card
+            randomEmojis();
+            state.stagingMessage1 = "You received an Emoji Card!";
+            state.stagingMessage2 =
+              "It had no emojis. 👀 So I made you one! 😊";
+
+            // Save, render, exit loading and notify user
+            saveState();
+            generateQueryString();
+            loading.value = false;
+            showToast("You received an Emoji Card!");
+          }
         } catch (error) {
           console.error(
             "Failed parsing query string. Fallback is loading default state."
           );
           console.error(error);
-          setDefault();
+
+          randomEmojis();
+          state.stagingMessage1 = "You received an Emoji Card!";
+          state.stagingMessage2 =
+            "But I couldn't read the link. 👀 So I made you a new one! 😊";
+
+          saveState();
           generateQueryString();
+          loading.value = false;
+          showToast("You received an Emoji Card!");
+
           console.log(state.queryString);
         }
       } else {
         console.error(
           "Query string didn't yield the correct Type. Fallback is loading default state."
         );
-        setDefault();
+
+        randomEmojis();
+        state.stagingMessage1 = "You received an Emoji Card!";
+        state.stagingMessage2 =
+          "But I couldn't read the link. 👀 So I made you one! 😊";
+
+        saveState();
         generateQueryString();
+        loading.value = false;
+        showToast("You received an Emoji Card!");
+
         console.log(state.queryString);
       }
     });
@@ -105,6 +154,7 @@ export default defineComponent({
     }
 
     return {
+      loading,
       onMounted,
       redirectToHome,
       setDefaultAndRedirectToHome

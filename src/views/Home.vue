@@ -11,19 +11,59 @@
       :editMode="true"
       @update:newMessage="state.stagingMessage2 = $event"
     />
-    <div style="margin: 0.5em 0 0.5em 0;">
-      <button class="button-left" @click="setDefault()">
+    <div class="button-wrapper">
+      <!-- eslint-disable prettier/prettier -->
+      <button
+        class="button-left-dynamic"
+        title="Restart"
+        @click="setDefault()"
+      >
         Restart
+        <span class="material-icons">
+          restart_alt
+        </span>
       </button>
-      <button @click="saveState()">
+      <button
+        class="button-dynamic"
+        title="Randomize all"
+        @click="randomEmojis(state.stagingEmojis.length)"
+      >
+        Randomize
+        <span class="material-icons">
+          category
+        </span>
+      </button>
+      <button
+        class="button-dynamic"
+        title="Save"
+        @click="saveState(), showToast('Card saved!')"
+      >
         Save
+        <span class="material-icons">
+          save
+        </span>
       </button>
-      <button @click="loadState()">
+      <button
+        class="button-dynamic"
+        title="Load"
+        @click="loadState()"
+      >
         Load
+        <span class="material-icons">
+          restore
+        </span>
       </button>
-      <button class="button-right" @click="clearStage">
+      <button
+        class="button-right-dynamic"
+        title="Clear all"
+        @click="clearStage"
+      >
         Clear all
+        <span class="material-icons">
+          clear
+        </span>
       </button>
+      <!-- eslint-enable prettier/prettier -->
     </div>
     <AddEmoji @addEmoji="newEmoji($event)" style="border: 1px dashed black;" />
   </div>
@@ -38,6 +78,7 @@ import state from "@/store/state";
 import {
   showToast,
   shiftEmoji,
+  randomEmojis,
   setDefault,
   saveState,
   loadState,
@@ -69,6 +110,7 @@ export default defineComponent({
     return {
       showToast,
       newEmoji,
+      randomEmojis,
       setDefault,
       saveState,
       loadState,
@@ -79,32 +121,22 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.home {
-  border: 1px solid black;
-  font-family: "Verdana", "Geneva", sans-serif;
+.button-wrapper {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.5em 0 0.5em 0;
 }
-/* button {
-  margin: 0;
-  padding: 0.5em;
-  font-size: 1em;
-  border: 2px solid rgb(216, 185, 255);
-  background-color: rgb(216, 185, 255);
-  transition: 400ms ease;
+
+.button-wrapper button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-button:hover {
-  background-color: rgb(231, 209, 255);
+
+.material-icons {
+  margin: 0 0 0 0.2em;
 }
-button:focus {
-  outline: 0;
-}
-.button-left {
-  padding: 0.5em 1em 0.5em 1em;
-  border-top-left-radius: 5em;
-  border-bottom-left-radius: 5em;
-}
-.button-right {
-  padding: 0.5em 1em 0.5em 1em;
-  border-top-right-radius: 5em;
-  border-bottom-right-radius: 5em;
-} */
 </style>

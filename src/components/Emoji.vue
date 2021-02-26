@@ -31,7 +31,17 @@ export default defineComponent({
 
 <style scoped>
 p {
+  -webkit-touch-callout: all;
+  -webkit-user-select: all;
+  -khtml-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
   display: block;
   border: 1px dashed orange;
+}
+
+p::selection {
+  background-color: rgba(0, 0, 0, 0);
 }
 </style>
