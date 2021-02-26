@@ -11,14 +11,14 @@
       :editMode="true"
       @update:newMessage="state.stagingMessage2 = $event"
     />
-    <div style="margin: 1.5em 0 0.5em 0;">
+    <div class="button-wrapper">
       <!-- eslint-disable prettier/prettier -->
       <button
         class="button-left-dynamic"
         title="Restart"
         @click="setDefault()"
       >
-        <span></span>Restart
+        Restart
         <span class="material-icons">
           restart_alt
         </span>
@@ -121,17 +121,22 @@ export default defineComponent({
 </script>
 
 <style scoped>
-span {
-  margin-left: 0.25em;
-  margin-right: 0.25em;
+.button-wrapper {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.5em 0 0.5em 0;
 }
 
-.home {
-  border: 1px solid black;
-  font-family: "Verdana", "Geneva", sans-serif;
+.button-wrapper button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .material-icons {
-  font-size: 18px;
+  margin: 0 0 0 0.2em;
 }
 </style>

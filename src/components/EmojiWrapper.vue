@@ -1,45 +1,56 @@
 <template>
-  <div class="outer-wrapper unselectable" v-if="editMode">
-    <!-- Render emojis from the staging state with editing buttons -->
-    <div
-      class="box-wrapper"
-      v-for="(codepoint, index) in state.stagingEmojis"
-      :key="index"
-      @drop.prevent="onDrop($event, index)"
-      @dragenter.prevent
-      @dragover.prevent
-    >
-      <Emoji
-        class="emoji-box"
-        :position="index"
-        :codepoint="codepoint"
-        :label="state.allEmojis.get(codepoint).label"
-        draggable="true"
-        @dragstart="startDrag($event, index)"
-      />
-      <div class="button-wrapper">
-        <button class="button-left" @click="moveLeft(index)">
-          <span class="material-icons">keyboard_arrow_left</span>
-        </button>
-        <button
-          @click="shiftEmoji(index, state.allEmojis.get(codepoint).category)"
-        >
-          <span class="material-icons">auto_awesome</span>
-        </button>
-        <button @click="makeCopy(index, codepoint)">
-          <span class="material-icons">content_copy</span>
-        </button>
-        <button @click="removeEmoji(index)">
-          <span class="material-icons">delete</span>
-        </button>
-        <button class="button-right" @click="moveRight(index)">
-          <span class="material-icons">keyboard_arrow_right</span>
-        </button>
-      </div>
+  <div v-if="editMode">
+    <!-- editMode: stagingEmojis with editing controls and Vue.Draggable -->
+    <div v-if="state.stagingEmojis.length === 0">
+      <p>Emojis cleared.</p>
+      <p>Use the add buttons bellow to start your Emoji Card. 😉</p>
     </div>
+    <draggable
+      v-model="state.stagingEmojis"
+      tag="div"
+      :component-data="{ class: 'outer-wrapper unselectable' }"
+      ghost-class="ghost"
+      drag-class="dragging-image"
+      animation="200"
+      easing="cubic-bezier(0.5, 0.5, 0.5, 0.5)"
+      handle=".emoji-box"
+      @start="drag = true"
+      @end="drag = false"
+      item-key="index"
+    >
+      <template #item="{ element, index }">
+        <div class="box-wrapper">
+          <Emoji
+            class="emoji-box"
+            :position="index"
+            :codepoint="element"
+            :label="state.allEmojis.get(element).label"
+          />
+          <div class="button-wrapper">
+            <button class="button-left" @click="moveLeft(index)">
+              <span class="material-icons">keyboard_arrow_left</span>
+            </button>
+            <button
+              @click="shiftEmoji(index, state.allEmojis.get(element).category)"
+            >
+              <span class="material-icons">auto_awesome</span>
+            </button>
+            <button @click="makeCopy(index, element)">
+              <span class="material-icons">content_copy</span>
+            </button>
+            <button @click="removeEmoji(index)">
+              <span class="material-icons">delete</span>
+            </button>
+            <button class="button-right" @click="moveRight(index)">
+              <span class="material-icons">keyboard_arrow_right</span>
+            </button>
+          </div>
+        </div>
+      </template>
+    </draggable>
   </div>
   <div v-else>
-    <!-- Render emojis from the saved state without editing buttons -->
+    <!-- Render savedEmojis without any editing controls -->
     <div v-if="state.savedEmojis.length === 0">
       <p>You haven't saved any emojis to your emoji card yet.</p>
       <p>You can do so in the editing area. 😊</p>
@@ -63,6 +74,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted } from "vue";
+import draggable from "vuedraggable";
 
 import state from "@/store/state";
 import {
@@ -72,7 +84,6 @@ import {
   removeEmoji,
   moveLeft,
   moveRight,
-  insertAtIndex,
   makeCopy
 } from "@/store/methods";
 
@@ -80,7 +91,10 @@ import Emoji from "@/components/Emoji.vue";
 
 export default defineComponent({
   name: "EmojiWrapper",
-  components: { Emoji },
+  components: {
+    draggable,
+    Emoji
+  },
   props: {
     editMode: {
       type: Boolean,
@@ -104,42 +118,7 @@ export default defineComponent({
       console.log(`Loaded emojis: ${state.allEmojis.size.toString()} \n`);
     });
 
-    function startDrag(evt: DragEvent, lastIndex: string) {
-      console.log("startDrag");
-      if (evt.dataTransfer !== null) {
-        evt.dataTransfer.dropEffect = "move";
-        evt.dataTransfer.effectAllowed = "move";
-        evt.dataTransfer.setData("lastIndex", lastIndex);
-        console.log(evt);
-        console.log(DataTransfer);
-        console.log(lastIndex);
-      } else {
-        throw new Error(
-          "Missing DataTranfer object on starting emoji drag event."
-        );
-      }
-    }
-
-    function onDrop(evt: DragEvent, newIndex: string) {
-      console.log("onDrop");
-      if (evt.dataTransfer !== null) {
-        const lastIndex = parseInt(evt.dataTransfer.getData("lastIndex"));
-        const emoji = state.stagingEmojis[lastIndex];
-        console.log(lastIndex);
-        console.log(emoji);
-
-        removeEmoji(lastIndex);
-        insertAtIndex(parseInt(newIndex), emoji);
-      } else {
-        throw new Error(
-          "Missing DataTranfer object on finishing emoji drag event."
-        );
-      }
-    }
-
     return {
-      startDrag,
-      onDrop,
       setDefault,
       shiftEmoji,
       removeEmoji,
@@ -200,5 +179,18 @@ button {
 
 .button-wrapper span {
   color: rgba(0, 0, 0, 0.76);
+}
+
+.ghost {
+  opacity: 0.25;
+}
+
+.dragging-image {
+  opacity: 1;
+  background-color: transparent;
+}
+
+.dragging-image .button-wrapper {
+  display: none;
 }
 </style>
