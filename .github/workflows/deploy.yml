@@ -27,6 +27,8 @@ jobs:
       # Deploy built application to GitHub pages branch
       - name: Deploy to GitHub Pages
         run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git checkout --orphan gh-pages
           git --work-tree dist add --all
           git --work-tree dist commit -m 'Deploy'
