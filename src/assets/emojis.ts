@@ -252,7 +252,6 @@ export const getCategory = (category: ValidCategories) => {
 
 export const categoryNames = () => {
   const categories: ValidCategories[] = Object.keys(emojis);
-  console.log(categories);
   return categories;
 };
 

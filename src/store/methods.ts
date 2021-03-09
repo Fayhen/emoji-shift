@@ -35,10 +35,10 @@ export function shiftEmoji(position: number, category: ValidCategories) {
   const codepoints = getCategory(category);
   const index = getRandomInt(0, codepoints.length);
   const newEmoji = codepoints[index];
-  console.log("newEmoji: ", newEmoji);
+  // console.log("newEmoji: ", newEmoji);
 
   setEmoji(position, newEmoji);
-  console.log(state.stagingEmojis);
+  // console.log(state.stagingEmojis);
 }
 
 export function removeEmoji(position: number) {
@@ -46,7 +46,7 @@ export function removeEmoji(position: number) {
 }
 
 export function moveLeft(position: number) {
-  console.log("Moving left from position", position);
+  // console.log("Moving left from position", position);
   if (position > 0) {
     const currentEmoji: string | undefined = state.stagingEmojis[position];
     const leftEmoji: string | undefined = state.stagingEmojis[position - 1];
@@ -59,7 +59,7 @@ export function moveLeft(position: number) {
 }
 
 export function moveRight(position: number) {
-  console.log("Moving right from position", position);
+  // console.log("Moving right from position", position);
   if (position < state.stagingEmojis.length) {
     const currentEmoji: string | undefined = state.stagingEmojis[position];
     const rightEmoji: string | undefined = state.stagingEmojis[position + 1];

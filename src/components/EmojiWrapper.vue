@@ -114,8 +114,8 @@ export default defineComponent({
       if (state.stagingEmojis.length === 0) {
         setDefault();
       }
-      console.log(state.stagingEmojis);
-      console.log(`Loaded emojis: ${state.allEmojis.size.toString()} \n`);
+      // console.log(state.stagingEmojis);
+      // console.log(`Loaded emojis: ${state.allEmojis.size.toString()} \n`);
     });
 
     return {

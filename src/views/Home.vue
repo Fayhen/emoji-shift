@@ -103,7 +103,7 @@ export default defineComponent({
   },
   setup() {
     function newEmoji(category: ValidCategories) {
-      console.log(category);
+      // console.log(category);
       shiftEmoji(state.stagingEmojis.length, category);
     }
 
