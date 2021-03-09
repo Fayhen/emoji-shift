@@ -7,7 +7,7 @@
     <EmojiWrapper :editMode="false" />
     <Message :msg="state.savedMessage2" :editMode="false" />
     <div style="margin: 3em 0 2em 0;">
-      <p>Liked this card?</p>
+      <p>Like this card?</p>
       <button class="button-left-dynamic" @click="redirectToHome">
         Edit it! 🎨
       </button>
@@ -22,7 +22,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { QueryParamsObject, isQueryParamsObject } from "@/assets/types";
+import { isQueryParamsObject } from "@/assets/types";
 
 import state from "@/store/state";
 import {
@@ -60,22 +60,13 @@ export default defineComponent({
         loadEmojis();
       }
 
-      console.log("Accessing route params...");
       const parameters = Object.assign(route.query);
-
-      console.log(parameters);
-      console.log(Boolean(parameters));
-      console.log(parameters as QueryParamsObject);
-      console.log((parameters as QueryParamsObject) !== undefined);
-      console.log(isQueryParamsObject(parameters));
+      // console.log(parameters);
 
       if (isQueryParamsObject(parameters)) {
-        console.log("Query parameters are OK.");
         try {
           // Parse data from the URL and add it to the staging state
           parseQueryParameters(parameters);
-          console.log(state.stagingEmojis);
-          console.log(state.queryString);
 
           // Check if the card had any emojis
           if (state.stagingEmojis.length > 0 && state.stagingEmojis[0] !== "") {
@@ -103,11 +94,7 @@ export default defineComponent({
             showToast("You received an Emoji Card!");
           }
         } catch (error) {
-          console.error(
-            "Failed parsing query string. Fallback is loading default state."
-          );
-          console.error(error);
-
+          // Handle errors after query string type validation
           randomEmojis();
           state.stagingMessage1 = "You received an Emoji Card!";
           state.stagingMessage2 =
@@ -117,14 +104,9 @@ export default defineComponent({
           generateQueryString();
           loading.value = false;
           showToast("You received an Emoji Card!");
-
-          console.log(state.queryString);
         }
       } else {
-        console.error(
-          "Query string didn't yield the correct Type. Fallback is loading default state."
-        );
-
+        // Handle URLs that do not pass query string type validation
         randomEmojis();
         state.stagingMessage1 = "You received an Emoji Card!";
         state.stagingMessage2 =
@@ -134,8 +116,6 @@ export default defineComponent({
         generateQueryString();
         loading.value = false;
         showToast("You received an Emoji Card!");
-
-        console.log(state.queryString);
       }
     });
 

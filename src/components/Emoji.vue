@@ -22,10 +22,10 @@ export default defineComponent({
       type: String,
       required: true
     }
-  },
-  setup(props) {
-    console.log("Child in index", props.position);
   }
+  // setup(props) {
+  //   console.log("Child in index", props.position);
+  // }
 });
 </script>
 
@@ -38,7 +38,6 @@ p {
   -ms-user-select: all;
   user-select: all;
   display: block;
-  border: 1px dashed orange;
 }
 
 p::selection {
