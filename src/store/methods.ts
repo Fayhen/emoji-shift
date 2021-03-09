@@ -94,7 +94,7 @@ export function setDefault() {
   if (state.allEmojis.size === 0) {
     loadEmojis();
   }
-  state.stagingMessage1 = "Welcome to emoji-shift!";
+  state.stagingMessage1 = "Welcome to Emoji-Shift!";
   state.stagingMessage2 = "Make your own emoji card!";
   randomEmojis();
 }
