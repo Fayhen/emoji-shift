@@ -1,6 +1,5 @@
 <template>
   <div class="preview">
-    <p>Check your saved Emoji Card below:</p>
     <Message :msg="state.savedMessage1" :editMode="false" />
     <EmojiWrapper :editMode="false" />
     <Message :msg="state.savedMessage2" :editMode="false" />

@@ -134,7 +134,6 @@ export default defineComponent({
 <style scoped>
 p {
   display: block;
-  border: 1px dashed orange;
 }
 
 button {
@@ -153,7 +152,6 @@ button {
   align-items: center;
   justify-content: center;
   margin: 0 0.25rem 1rem 0.25rem;
-  border: 1px solid black;
 }
 
 .emoji-box {
@@ -161,7 +159,6 @@ button {
   height: 12rem;
   margin: 1rem;
   font-size: 9.5rem;
-  border: 1px dashed black;
   cursor: grab;
 }
 
@@ -173,7 +170,6 @@ button {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
-  border: 1px solid black;
   font-size: 12px;
 }
 

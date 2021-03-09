@@ -32,7 +32,6 @@ export default defineComponent({
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 1em;
-  border: 1px dashed black;
 }
 
 button {
@@ -40,23 +39,4 @@ button {
   border-radius: 5rem;
   margin: 0 0.5em 0.5em 0.5em;
 }
-
-/* button {
-  min-width: 10rem;
-  margin: 2px;
-  padding: 0.5em;
-  font-size: 1em;
-  border: 1px solid rgb(216, 185, 255);
-  border-radius: 5rem;
-  background-color: rgb(216, 185, 255);
-  transition: 400ms ease;
-}
-
-button:hover {
-  background-color: rgb(231, 209, 255);
-}
-
-button:focus {
-  outline: 0;
-} */
 </style>

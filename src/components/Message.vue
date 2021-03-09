@@ -130,7 +130,6 @@ form {
   flex-direction: column;
   align-items: center;
   padding: 0;
-  border: 1px dashed black;
 }
 
 .text-input {

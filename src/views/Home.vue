@@ -65,7 +65,7 @@
       </button>
       <!-- eslint-enable prettier/prettier -->
     </div>
-    <AddEmoji @addEmoji="newEmoji($event)" style="border: 1px dashed black;" />
+    <AddEmoji @addEmoji="newEmoji($event)" />
   </div>
 </template>
 
@@ -127,7 +127,7 @@ export default defineComponent({
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 1.5em 0 0.5em 0;
+  margin: 3rem 0 2rem 0;
 }
 
 .button-wrapper button {

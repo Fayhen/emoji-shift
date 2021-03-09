@@ -7,7 +7,7 @@
     <EmojiWrapper :editMode="false" />
     <Message :msg="state.savedMessage2" :editMode="false" />
     <div style="margin: 3em 0 2em 0;">
-      <p>Liked this card?</p>
+      <p>Like this card?</p>
       <button class="button-left-dynamic" @click="redirectToHome">
         Edit it! 🎨
       </button>

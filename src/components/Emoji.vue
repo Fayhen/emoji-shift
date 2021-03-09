@@ -38,7 +38,6 @@ p {
   -ms-user-select: all;
   user-select: all;
   display: block;
-  border: 1px dashed orange;
 }
 
 p::selection {

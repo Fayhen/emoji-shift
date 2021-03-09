@@ -55,6 +55,14 @@ button:focus {
   user-select: none;
 }
 
+.dev-borders-solid {
+  border: 1px solid black;
+}
+
+.dev-borders-dashed {
+  border: 1px dashed black;
+}
+
 @media only screen and (max-width: 750px) {
   .button-dynamic,
   .button-left-dynamic,
