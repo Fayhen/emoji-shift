@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ feature/continuous-deployment ]
+    branches: [ main ]
 
   workflow_dispatch:
 
@@ -34,7 +34,5 @@ jobs:
           git --work-tree dist commit -m 'Deploy'
           git push origin HEAD:gh-pages --force
           rm -r dist
-          git branch -a
-          git show-ref
-          git checkout -f master
+          git checkout -f main
           git branch -D gh-pages
