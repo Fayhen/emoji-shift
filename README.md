@@ -1,44 +1,68 @@
 # emoji-shift
 
-Welcome to Emoji-Shift! This is a Single Page Application built with Vue.js 3 and TypeScript.
+This template should help get you started developing with Vue 3 in Vite.
 
-Create simple emoji cards consisting of an array of emojis and optional top and bottom messages. Drag emojis around, randomize them, remove or add new ones. Use the save and load buttons to keep track of your progress and go to the preview page to check how it is turning out. In there you will also find a link that generate the card you have saved. You can copy it and share to whoever you like, and they'll be able to see the same card.
+## Recommended IDE Setup
 
-Emojis can be rendered differently whether you are viewing them on Google Chrome, Firefox, Safari and other platforms. The same card will look slightly different depending on the device, but it will always contain the same emojis and messages.
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Technical aspects
-Emoji-Shift uses [Vue 3's Composition API](https://v3.vuejs.org/api/composition-api.html) to render and transfer data between components. It also uses a centralized store to keep the available emojis, as well as the card's emojis and messages. There are two sperate states for the card data: one for the saved card, and one for the card currently in-progress. This store is entirely contained within a single reactive object, thanks to [Vue 3's new Reactivity API](https://v3.vuejs.org/api/basic-reactivity.html). Methods for handling the data, as well as URL parsing, are also kept on a centralized file. TypeScript is integrated in all these methods.
+## Type Support for `.vue` Imports in TS
 
-[Vue Router](https://github.com/vuejs/vue-router-next) is in place to handle views and the URL query parameters used to share emoji cards. When first accessing Emoji-Shift, either through the card sharing route or the home route, all emojis are parsed from a raw data object and loaded into the store. First accessing the application on the home route also makes a card with 4 random emojis and default messages to be loaded into the editing state, rendereding them to the user.
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
-Any access on the card sharing route will call methods to parse query params from the URL and generate a new card from them. Problems during this process, or accessing this route without the query params, will cause a random card to be loaded. Finally, accessing the Preview route will render the card in the saved state. If no card was saved yet, the view simply informs the user of the fact and invites to do so on the editing area.
+If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
-The same Vue component is used to render emoji cards in all views. Props and conditional rendering is used to fetch the correct data from the store, and either show or omit the editing controls accordingly.
+1. Disable the built-in TypeScript Extension
+    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
-Emoji-Shift will be kept updated with Vue 3's current stable version. Current plans include the implementation of tests and some revisions.
+## Customize configuration
 
-## Project setup
-To run Emoji-Shift locally, simply clone this repository and follow the steps bellow.
+See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-### Install dependencies
-```
-yarn install
-```
+## Project Setup
 
-### Compiles and hot-reloads for development
-```
-yarn serve
+```sh
+yarn
 ```
 
-### Compiles and minifies for production
+### Compile and Hot-Reload for Development
+
+```sh
+yarn dev
 ```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
 yarn build
 ```
 
-### Lints and fixes files
-```
-yarn lint
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+yarn test:unit
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+
+```sh
+yarn test:e2e:dev
+```
+
+This runs the end-to-end tests against the Vite development server.
+It is much faster than the production build.
+
+But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
+
+```sh
+yarn build
+yarn test:e2e
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+yarn lint
+```
