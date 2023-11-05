@@ -12,17 +12,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+const emit = defineEmits<{
+  addEmoji: [category: string]
+}>()
 
-export default defineComponent({
-  name: "AddEmoji",
-  methods: {
-    addEmoji(type: string) {
-      this.$emit("addEmoji", type);
-    }
-  }
-});
+function addEmoji(type: string) {
+  emit('addEmoji', type)
+}
 </script>
 
 <style scoped>
@@ -38,5 +35,9 @@ button {
   min-width: 12rem;
   border-radius: 5rem;
   margin: 0 0.5em 0.5em 0.5em;
+}
+
+p {
+  margin-bottom: 1em;
 }
 </style>

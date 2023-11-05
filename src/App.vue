@@ -1,19 +1,19 @@
 <template>
-  <Toast />
+  <TopToast />
   <div id="nav">
-    <router-link to="/">Edit</router-link> |
-    <router-link to="/preview">Preview</router-link> |
+    <router-link to="/">Edit</router-link> | <router-link to="/preview">Preview</router-link> |
     <router-link to="/about">About</router-link>
   </div>
   <router-view />
 </template>
 
-<style>
-@import "./assets/css/global.css";
+<script setup lang="ts">
+import TopToast from './components/TopToast.vue'
+</script>
 
+<style>
 html,
 body {
-  height: 100%;
   background-color: rgb(230, 215, 255);
 }
 
@@ -27,7 +27,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* min-height: 100vh; */
 }
 
 #nav {

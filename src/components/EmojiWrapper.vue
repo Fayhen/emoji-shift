@@ -1,82 +1,63 @@
 <template>
   <div v-if="editMode">
-    <!-- editMode: stagingEmojis with editing controls and Vue.Draggable -->
-    <div v-if="state.stagingEmojis.length === 0">
+    <!-- Edit mode: render stagingEmojis with editing controls -->
+    <div v-if="state.stagingEmojis.length === 0" class="spaced-paragraphs">
       <p>Emojis cleared.</p>
       <p>Use the add buttons bellow to start your Emoji Card. 😉</p>
     </div>
-    <draggable
-      v-model="state.stagingEmojis"
-      tag="div"
-      :component-data="{ class: 'outer-wrapper unselectable' }"
-      ghost-class="ghost"
-      drag-class="dragging-image"
-      animation="200"
-      easing="cubic-bezier(0.5, 0.5, 0.5, 0.5)"
-      handle=".emoji-box"
-      @start="drag = true"
-      @end="drag = false"
-      item-key="index"
-    >
-      <template #item="{ element, index }">
-        <div class="box-wrapper">
-          <Emoji
-            class="emoji-box"
-            :position="index"
-            :codepoint="element"
-            :label="state.allEmojis.get(element).label"
-          />
-          <div class="button-wrapper">
-            <button class="button-left" @click="moveLeft(index)">
-              <span class="material-icons">keyboard_arrow_left</span>
-            </button>
-            <button
-              @click="shiftEmoji(index, state.allEmojis.get(element).category)"
-            >
-              <span class="material-icons">auto_awesome</span>
-            </button>
-            <button @click="makeCopy(index, element)">
-              <span class="material-icons">content_copy</span>
-            </button>
-            <button @click="removeEmoji(index)">
-              <span class="material-icons">delete</span>
-            </button>
-            <button class="button-right" @click="moveRight(index)">
-              <span class="material-icons">keyboard_arrow_right</span>
-            </button>
-          </div>
+    <div ref="draggable" class="outer-wrapper">
+      <div class="box-wrapper" v-for="(codepoint, index) in state.stagingEmojis" :key="index">
+        <EmojiItem
+          class="emoji-box"
+          :position="index"
+          :codepoint="codepoint"
+          :label="state.allEmojis.get(codepoint)?.label ?? ''"
+        />
+        <div class="button-wrapper">
+          <button class="button-left" @click="moveLeft(index)">
+            <span class="material-icons">keyboard_arrow_left</span>
+          </button>
+          <button @click="shiftEmoji(index, state.allEmojis.get(codepoint)?.category ?? '')">
+            <span class="material-icons">auto_awesome</span>
+          </button>
+          <button @click="makeCopy(index, codepoint)">
+            <span class="material-icons">content_copy</span>
+          </button>
+          <button @click="removeEmoji(index)">
+            <span class="material-icons">delete</span>
+          </button>
+          <button class="button-right" @click="moveRight(index)">
+            <span class="material-icons">keyboard_arrow_right</span>
+          </button>
         </div>
-      </template>
-    </draggable>
+      </div>
+    </div>
   </div>
+
   <div v-else>
-    <!-- Render savedEmojis without any editing controls -->
+    <!-- View mode: render savedEmojis without editing controls -->
     <div v-if="state.savedEmojis.length === 0">
       <p>You haven't saved any emojis to your emoji card yet.</p>
       <p>You can do so in the editing area. 😊</p>
     </div>
     <div class="outer-wrapper unselectable" v-else>
-      <div
-        class="box-wrapper"
-        v-for="(codepoint, index) in state.savedEmojis"
-        :key="index"
-      >
-        <Emoji
+      <div class="box-wrapper" v-for="(codepoint, index) in state.savedEmojis" :key="index">
+        <EmojiItem
           class="emoji-box"
           :position="index"
           :codepoint="codepoint"
-          :label="state.allEmojis.get(codepoint).label"
+          :label="state.allEmojis.get(codepoint)?.label ?? ''"
         />
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted } from "vue";
-import draggable from "vuedraggable";
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { useSortable } from '@vueuse/integrations/useSortable'
 
-import state from "@/store/state";
+import state from '@/stores/state'
 import {
   loadEmojis,
   setDefault,
@@ -85,50 +66,28 @@ import {
   moveLeft,
   moveRight,
   makeCopy
-} from "@/store/methods";
+} from '@/stores/methods'
 
-import Emoji from "@/components/Emoji.vue";
+import EmojiItem from '@/components/EmojiItem.vue'
 
-export default defineComponent({
-  name: "EmojiWrapper",
-  components: {
-    draggable,
-    Emoji
-  },
-  props: {
-    editMode: {
-      type: Boolean,
-      required: true
-    }
-  },
-  data() {
-    return {
-      state: state
-    };
-  },
-  setup() {
-    onMounted(() => {
-      if (state.allEmojis.size === 0) {
-        loadEmojis();
-      }
-      if (state.stagingEmojis.length === 0) {
-        setDefault();
-      }
-      // console.log(state.stagingEmojis);
-      // console.log(`Loaded emojis: ${state.allEmojis.size.toString()} \n`);
-    });
+defineProps<{
+  editMode: boolean
+}>()
 
-    return {
-      setDefault,
-      shiftEmoji,
-      removeEmoji,
-      onMounted,
-      moveLeft,
-      moveRight,
-      makeCopy
-    };
+onMounted(() => {
+  if (state.allEmojis.size === 0) {
+    loadEmojis()
   }
-});
+  if (state.stagingEmojis.length === 0) {
+    setDefault()
+  }
+  // console.log(state.stagingEmojis);
+  // console.log(`Loaded emojis: ${state.allEmojis.size.toString()} \n`);
+})
+
+const draggable = ref<HTMLElement | null>(null)
+
+useSortable(draggable, state.stagingEmojis)
 </script>
 
 <style scoped>
