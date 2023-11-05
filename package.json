@@ -1,7 +1,11 @@
 {
   "name": "emoji-shift",
-  "version": "0.0.0",
+  "version": "2.0.0-alpha",
   "private": true,
+  "author": {
+    "name": "Diego Garcia Cordeiro Souza",
+    "email": "diego00alfa@gmail.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",

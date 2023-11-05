@@ -1,0 +1,11 @@
+.dev-borders-solid {
+  border: 1px solid black;
+}
+
+.dev-borders-dashed {
+  border: 1px dashed black;
+}
+
+.spaced-paragraphs p {
+  margin: 1em 0;
+}
