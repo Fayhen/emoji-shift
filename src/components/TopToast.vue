@@ -1,13 +1,15 @@
 <template>
   <transition name="slide-fade">
-    <div id="toast" v-if="state.showToast">
-      {{ state.toastMsg }}
+    <div id="toast" v-if="store.showToast">
+      {{ store.toastMsg }}
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
-import state from '@/stores/state'
+import { useEmojiStore } from '@/stores/emojis'
+
+const store = useEmojiStore()
 </script>
 
 <style scoped>
