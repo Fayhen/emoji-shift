@@ -23,13 +23,13 @@ import { useEmojiStore } from '@/stores/emojis'
 
 import MessageWrapper from '@/components/MessageWrapper.vue'
 import EmojiWrapper from '@/components/EmojiWrapper.vue'
-  
-  import { isQueryParamsObject } from '@/models/type-guards'
-  
-  const store = useEmojiStore()
-  const router = useRouter()
-  const route = useRoute()
-  const loading = ref(true)
+
+import { isQueryParamsObject } from '@/models/type-guards'
+
+const store = useEmojiStore()
+const router = useRouter()
+const route = useRoute()
+const loading = ref(true)
 
 onMounted(() => {
   if (store.allEmojis.size === 0) {

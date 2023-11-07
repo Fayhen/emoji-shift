@@ -25,7 +25,11 @@
         Randomize
         <span class="material-icons"> category </span>
       </button>
-      <button class="button-dynamic" title="Save" @click="store.saveState(), store.triggerToast('Card saved!')">
+      <button
+        class="button-dynamic"
+        title="Save"
+        @click="store.saveState(), store.triggerToast('Card saved!')"
+      >
         Save
         <span class="material-icons"> save </span>
       </button>

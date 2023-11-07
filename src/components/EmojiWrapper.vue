@@ -1,24 +1,31 @@
 <template>
   <div v-if="editMode">
     <!-- Edit mode: render stagingEmojis with editing controls -->
-    <div v-if="store.stagingEmojis.length === 0" class="spaced-paragraphs">
+    <div v-if="Object.keys(store.stagingEmojis).length === 0" class="spaced-paragraphs">
       <p>Emojis cleared.</p>
       <p>Use the add buttons bellow to start your Emoji Card. 😉</p>
     </div>
-    <div ref="draggable" class="outer-wrapper">
-      <div class="box-wrapper" v-for="(codepoint, index) in store.stagingEmojis" :key="index">
+    <div id="draggable" ref="draggable" class="outer-wrapper">
+      <!-- eslint-disable-next-line vue/valid-v-for -->
+      <div
+        class="box-wrapper"
+        v-for="(emoji, index) in store.stagingEmojis"
+        :key="emoji.key"
+        :data-id="`${emoji.codepoint}-${emoji.key}`"
+      >
         <EmojiItem
           class="emoji-box"
-          :position="index"
-          :codepoint="codepoint"
-          :label="store.allEmojis.get(codepoint)?.label ?? ''"
+          :codepoint="emoji.codepoint"
+          :label="store.allEmojis.get(emoji.codepoint)?.label ?? ''"
         />
-        {{ index }}
+        {{ `${emoji.codepoint} ${index}` }}
         <div class="button-wrapper">
           <button class="button-left" @click="store.moveLeft(index)">
             <span class="material-icons">keyboard_arrow_left</span>
           </button>
-          <button @click="store.shiftEmoji(index, store.allEmojis.get(codepoint)?.category ?? '')">
+          <button
+            @click="store.shiftEmoji(index, store.allEmojis.get(emoji.codepoint)?.category ?? '')"
+          >
             <span class="material-icons">auto_awesome</span>
           </button>
           <button @click="store.makeCopy(index)">
@@ -37,17 +44,17 @@
 
   <div v-else>
     <!-- View mode: render savedEmojis without editing controls -->
-    <div v-if="store.savedEmojis.length === 0">
+    <div v-if="Object.keys(store.savedEmojis).length === 0">
       <p>You haven't saved any emojis to your emoji card yet.</p>
       <p>You can do so in the editing area. 😊</p>
     </div>
     <div class="outer-wrapper unselectable" v-else>
-      <div class="box-wrapper" v-for="(codepoint, index) in store.savedEmojis" :key="index">
+      <div class="box-wrapper" v-for="(emoji, index) in store.savedEmojis" :key="index">
         <EmojiItem
           class="emoji-box"
           :position="index"
-          :codepoint="codepoint"
-          :label="store.allEmojis.get(codepoint)?.label ?? ''"
+          :codepoint="emoji.codepoint"
+          :label="store.allEmojis.get(emoji.codepoint)?.label ?? ''"
         />
       </div>
     </div>
@@ -58,10 +65,11 @@
 import { onMounted, ref } from 'vue'
 import { useSortable } from '@vueuse/integrations/useSortable'
 import { useEmojiStore } from '@/stores/emojis'
-
+// import { getRandomInt } from '@/utils/randomInt'
+// import Sortable from 'sortablejs';
 
 import EmojiItem from '@/components/EmojiItem.vue'
-import { nextTick } from 'process';
+// import { nextTick } from 'process';
 
 defineProps<{
   editMode: boolean
@@ -73,7 +81,7 @@ onMounted(() => {
   if (store.allEmojis.size === 0) {
     store.loadEmojis()
   }
-  if (store.stagingEmojis.length === 0) {
+  if (Object.keys(store.stagingEmojis).length === 0) {
     store.setDefaultCard()
   }
   // console.log(store.stagingEmojis);
@@ -84,11 +92,18 @@ const draggable = ref<HTMLElement | null>(null)
 
 useSortable(draggable, store.stagingEmojis, {
   animation: 150,
-  onEnd: (e: Record<string, unknown>) => {
-    console.log(e)
-    store.moveFromIndex(e.oldDraggableIndex as number, e.newDraggableIndex as number)
-    nextTick(() => {})
-    console.log(store.stagingEmojis)
+  store: {
+    get: () => {
+      return store.stagingEmojis.map((codepoint) => String(codepoint))
+    },
+    set: (sortable) => {
+      const order = sortable.toArray()
+      store.stagingEmojis = order.map((dataString) => {
+        const [codepoint, key] = dataString.split('-')
+        return { codepoint: Number(codepoint), key }
+      })
+      console.log({ order, store: store.stagingEmojis })
+    }
   }
 })
 </script>

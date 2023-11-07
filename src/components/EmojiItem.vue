@@ -6,7 +6,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  position: number
   codepoint: number
   label: string
 }>()

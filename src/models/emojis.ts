@@ -42,6 +42,21 @@ export interface AllEmojis {
 }
 
 /**
+ * Emoji data kept in the application store specifically for
+ * loop rendering.
+ */
+export type EmojiStoreData = {
+  /**
+   * Emoji codepoint.
+   */
+  codepoint: number
+  /**
+   * Random unique key.
+   */
+  key: string
+}
+
+/**
  * Available emoji codepoints.
  */
 export type ValidCodepoints = Extract<keyof AllEmojis, number>

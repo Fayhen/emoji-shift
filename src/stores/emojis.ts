@@ -2,23 +2,33 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { categoryNames, getCategory, retrieveAll } from '@/assets/emojis'
 import { getRandomInt } from '@/utils/randomInt'
-import type { AllEmojis, EmojiData, ValidCategories, ValidCodepoints } from '@/models/emojis'
+import { getRandomStr } from '@/utils/randomStr'
+import type {
+  AllEmojis,
+  EmojiData,
+  EmojiStoreData,
+  ValidCategories,
+  ValidCodepoints
+} from '@/models/emojis'
 import type { QueryParamsObject } from '@/models/utils'
 
+/**
+ * Emojis store.
+ */
 export const useEmojiStore = defineStore('emojis', () => {
   // Emojis data
   const allEmojis = ref(new Map<number, EmojiData>())
-  
+
   // Staging data (handled in edit mode)
   const stagingMessage1 = ref('')
   const stagingMessage2 = ref('')
-  const stagingEmojis = ref(new Array<ValidCodepoints>())
+  const stagingEmojis = ref(new Array<EmojiStoreData>())
 
   // Saved data (handled in view mode)
   const savedMessage1 = ref('')
   const savedMessage2 = ref('')
-  const savedEmojis = ref(new Array<ValidCodepoints>())
-  
+  const savedEmojis = ref(new Array<EmojiStoreData>())
+
   // UI properties
   const showToast = ref(false)
   const toastMsg = ref('Default')
@@ -35,7 +45,7 @@ export const useEmojiStore = defineStore('emojis', () => {
       allEmojis.value.clear()
     }
     const refreshedEmojis: AllEmojis = retrieveAll()
-  
+
     for (const [codepoint, emojiData] of Object.entries(refreshedEmojis)) {
       allEmojis.value.set(Number(codepoint), emojiData)
     }
@@ -47,9 +57,13 @@ export const useEmojiStore = defineStore('emojis', () => {
    *
    * @param position Index to set the emoji into.
    * @param codepoint Emoji codepoint.
+   * @param key Randomized string key. Defaults to an empty string.
    */
-  function setEmoji(position: number, codepoint: ValidCodepoints) {
-    stagingEmojis.value.splice(position, 1, codepoint)
+  function setEmoji(position: number, codepoint: ValidCodepoints, key = '') {
+    stagingEmojis.value.splice(position, 1, {
+      codepoint,
+      key: key || getRandomStr(10)
+    })
   }
 
   /**
@@ -63,10 +77,8 @@ export const useEmojiStore = defineStore('emojis', () => {
     const codepoints = getCategory(category)
     const random = getRandomInt(0, codepoints.length)
     const newEmoji = codepoints[random]
-    // console.log("newEmoji: ", newEmoji);
-  
+
     setEmoji(position, newEmoji)
-    // console.log(state.stagingEmojis);
   }
 
   /**
@@ -79,8 +91,8 @@ export const useEmojiStore = defineStore('emojis', () => {
   function swapEmojis(indexA: number, indexB: number) {
     const emojiA = stagingEmojis.value[indexA]
     const emojiB = stagingEmojis.value[indexB]
-    setEmoji(indexA, emojiB)
-    setEmoji(indexB, emojiA)
+    setEmoji(indexA, emojiB.codepoint, emojiB.key)
+    setEmoji(indexB, emojiA.codepoint, emojiA.key)
   }
 
   /**
@@ -99,20 +111,17 @@ export const useEmojiStore = defineStore('emojis', () => {
    * @param position Index to move the emoji from.
    */
   function moveLeft(position: number) {
-    console.log("Moving left from position", position);
     if (position > 0) {
-      const currentEmoji: number | undefined = stagingEmojis.value[position]
-      const leftEmoji: number | undefined = stagingEmojis.value[position - 1]
-      console.log({ currentEmoji, leftEmoji })
-  
+      const currentEmoji: EmojiStoreData | undefined = stagingEmojis.value[position]
+      const leftEmoji: EmojiStoreData | undefined = stagingEmojis.value[position - 1]
+
       if (currentEmoji != undefined && leftEmoji != undefined) {
-        setEmoji(position - 1, currentEmoji)
-        setEmoji(position, leftEmoji)
+        setEmoji(position - 1, currentEmoji.codepoint, currentEmoji.key)
+        setEmoji(position, leftEmoji.codepoint, leftEmoji.key)
       }
-      console.log(stagingEmojis.value)
     }
   }
-  
+
   /**
    * Moves the emoji at a given index of the staging emojis array, to
    * the next index.
@@ -120,17 +129,14 @@ export const useEmojiStore = defineStore('emojis', () => {
    * @param position Index to move the emoji from.
    */
   function moveRight(position: number) {
-    console.log("Moving right from position", position);
-    if (position < stagingEmojis.value.length) {
-      const currentEmoji: number | undefined = stagingEmojis.value[position]
-      const rightEmoji: number | undefined = stagingEmojis.value[position + 1]
-      console.log({ currentEmoji, rightEmoji })
-  
+    if (position < Object.keys(stagingEmojis.value).length) {
+      const currentEmoji: EmojiStoreData | undefined = stagingEmojis.value[position]
+      const rightEmoji: EmojiStoreData | undefined = stagingEmojis.value[position + 1]
+
       if (currentEmoji != undefined && rightEmoji != undefined) {
-        setEmoji(position + 1, currentEmoji)
-        setEmoji(position, rightEmoji)
+        setEmoji(position + 1, currentEmoji.codepoint, currentEmoji.key)
+        setEmoji(position, rightEmoji.codepoint, rightEmoji.key)
       }
-      console.log(stagingEmojis.value)
     }
   }
 
@@ -143,10 +149,8 @@ export const useEmojiStore = defineStore('emojis', () => {
    */
   function moveFromIndex(oldIndex: number, newIndex: number) {
     const emoji = stagingEmojis.value[oldIndex]
-    console.log(stagingEmojis.value)
-    console.log({ oldIndex, newIndex })
     removeEmoji(oldIndex)
-    insertEmojiAtIndex(newIndex, emoji)
+    insertEmojiAtIndex(newIndex, emoji.codepoint, emoji.key)
   }
 
   /**
@@ -154,10 +158,14 @@ export const useEmojiStore = defineStore('emojis', () => {
    * array. Previous emojis are displaced to the next indexes.
    *
    * @param index Index to insert the emoji at.
-   * @param emoji Emoji codepoint.
+   * @param codepoint Emoji codepoint.
+   * @param key Randomized string key. Defaults to an empty string.
    */
-  function insertEmojiAtIndex(index: number, emoji: ValidCodepoints) {
-    stagingEmojis.value.splice(index, 0, emoji)
+  function insertEmojiAtIndex(index: number, codepoint: ValidCodepoints, key = '') {
+    stagingEmojis.value.splice(index, 0, {
+      codepoint,
+      key: key || getRandomStr(10)
+    })
   }
 
   /**
@@ -168,7 +176,7 @@ export const useEmojiStore = defineStore('emojis', () => {
    */
   function makeCopy(index: number) {
     const emoji = stagingEmojis.value[index]
-    insertEmojiAtIndex(index, emoji)
+    insertEmojiAtIndex(index, emoji.codepoint)
   }
 
   /**
@@ -180,7 +188,7 @@ export const useEmojiStore = defineStore('emojis', () => {
   function resetAndRandomizeEmojis(amount = 4) {
     stagingEmojis.value = []
     const categories: ValidCategories[] = categoryNames()
-  
+
     for (let i = 0; i < amount; i++) {
       const randomIndex = getRandomInt(0, categories.length - 1)
       shiftEmoji(i, categories[randomIndex])
@@ -207,7 +215,7 @@ export const useEmojiStore = defineStore('emojis', () => {
     const emojisParam = '?emojis=' + savedEmojis.value.toString()
     const message1Param = '&msg1=' + savedMessage1.value.replace(/\s+/g, '_')
     const message2Param = '&msg2=' + savedMessage2.value.replace(/\s+/g, '_')
-  
+
     queryString.value = emojisParam + message1Param + message2Param
   }
 
@@ -220,19 +228,21 @@ export const useEmojiStore = defineStore('emojis', () => {
   function parseQueryParameters(parameters: QueryParamsObject) {
     stagingMessage1.value = parameters.msg1.replace(/_/g, ' ')
     stagingMessage2.value = parameters.msg2.replace(/_/g, ' ')
-  
+
     const validCodepoints: ValidCodepoints[] = Array.from(allEmojis.value.keys())
     const passedCodepoints: ValidCodepoints[] = []
     const rawCodepoints: string[] = parameters.emojis.split(',')
-  
+
     for (const rawCodepoint of rawCodepoints) {
       const codepoint = Number(rawCodepoint)
       if (validCodepoints.includes(codepoint)) {
         passedCodepoints.push(codepoint)
       }
     }
-  
-    stagingEmojis.value = passedCodepoints
+
+    stagingEmojis.value = passedCodepoints.map((codepoint) => {
+      return { codepoint, key: getRandomStr(10) }
+    })
   }
 
   /**
@@ -243,7 +253,7 @@ export const useEmojiStore = defineStore('emojis', () => {
     savedMessage1.value = stagingMessage1.value
     savedMessage2.value = stagingMessage2.value
     savedEmojis.value = [...stagingEmojis.value]
-  
+
     generateQueryString()
   }
 
@@ -252,13 +262,13 @@ export const useEmojiStore = defineStore('emojis', () => {
    * a toast UI element.
    */
   function loadState() {
-    if (savedEmojis.value.length === 0) {
+    if (Object.keys(savedEmojis.value).length === 0) {
       triggerToast("You haven't saved an emoji card yet.")
     } else {
       stagingMessage1.value = savedMessage1.value
       stagingMessage2.value = savedMessage2.value
-      stagingEmojis.value = [...savedEmojis.value]
-  
+      stagingEmojis.value = { ...savedEmojis.value }
+
       triggerToast('Card loaded!')
     }
   }
@@ -271,7 +281,7 @@ export const useEmojiStore = defineStore('emojis', () => {
     stagingMessage2.value = ''
     stagingEmojis.value = []
   }
-  
+
   /**
    * Clears all saved data.
    */
