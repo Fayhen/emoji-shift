@@ -24,7 +24,7 @@ import MessageWrapper from '@/components/MessageWrapper.vue'
 
 const store = useEmojiStore()
 const currentRoute = window.location.href
-const cardLink = currentRoute.replace('/preview', '/view' + store.queryString)
+const cardLink = currentRoute.replace('/preview', '/view?' + store.queryString)
 </script>
 
 <style scoped>

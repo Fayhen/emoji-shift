@@ -24,7 +24,7 @@ import { useEmojiStore } from '@/stores/emojis'
 import MessageWrapper from '@/components/MessageWrapper.vue'
 import EmojiWrapper from '@/components/EmojiWrapper.vue'
 
-import { isQueryParamsObject } from '@/models/type-guards'
+import { isEmojiShareParamsObject } from '@/models/type-guards'
 
 const store = useEmojiStore()
 const router = useRouter()
@@ -39,10 +39,10 @@ onMounted(() => {
   const parameters = Object.assign(route.query)
   // console.log(parameters);
 
-  if (isQueryParamsObject(parameters)) {
+  if (isEmojiShareParamsObject(parameters)) {
     try {
       // Parse data from the URL and add it to the staging state
-      store.parseQueryParameters(parameters)
+      store.decodeShareParams(parameters)
 
       // Check if the card had any emojis
       if (store.stagingEmojis.length > 0) {
@@ -51,7 +51,7 @@ onMounted(() => {
         store.saveState()
 
         // Recreate the query string using the new saved state
-        store.generateQueryString()
+        store.encodeShareParams()
 
         // Exit loading and give feedback to the user
         loading.value = false
@@ -64,7 +64,7 @@ onMounted(() => {
 
         // Save, render, exit loading and notify user
         store.saveState()
-        store.generateQueryString()
+        store.encodeShareParams()
         loading.value = false
         store.triggerToast('You received an Emoji Card!')
       }
@@ -75,7 +75,7 @@ onMounted(() => {
       store.stagingMessage2 = "But I couldn't read the link. 👀 So I made you a new one! 😊"
 
       store.saveState()
-      store.generateQueryString()
+      store.encodeShareParams()
       loading.value = false
       store.triggerToast('You received an Emoji Card!')
     }
@@ -86,7 +86,7 @@ onMounted(() => {
     store.stagingMessage2 = "But I couldn't read the link. 👀 So I made you one! 😊"
 
     store.saveState()
-    store.generateQueryString()
+    store.encodeShareParams()
     loading.value = false
     store.triggerToast('You received an Emoji Card!')
   }

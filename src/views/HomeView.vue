@@ -12,7 +12,6 @@
       @update="store.stagingMessage2 = $event"
     />
     <div class="button-wrapper">
-      <!-- eslint-disable prettier/prettier -->
       <button class="button-left-dynamic" title="Restart" @click="store.setDefaultCard()">
         Restart
         <span class="material-icons"> restart_alt </span>
@@ -59,7 +58,6 @@ import type { ValidCategories } from '@/models/emojis'
 const store = useEmojiStore()
 
 function newEmoji(category: ValidCategories) {
-  // console.log(category);
   store.shiftEmoji(store.stagingEmojis.length, category)
 }
 </script>

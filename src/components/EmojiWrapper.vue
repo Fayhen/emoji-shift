@@ -18,7 +18,6 @@
           :codepoint="emoji.codepoint"
           :label="store.allEmojis.get(emoji.codepoint)?.label ?? ''"
         />
-        {{ `${emoji.codepoint} ${index}` }}
         <div class="button-wrapper">
           <button class="button-left" @click="store.moveLeft(index)">
             <span class="material-icons">keyboard_arrow_left</span>

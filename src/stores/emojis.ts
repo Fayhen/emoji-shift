@@ -6,11 +6,11 @@ import { getRandomStr } from '@/utils/randomStr'
 import type {
   AllEmojis,
   EmojiData,
+  EmojiShareParams,
   EmojiStoreData,
   ValidCategories,
   ValidCodepoints
 } from '@/models/emojis'
-import type { QueryParamsObject } from '@/models/utils'
 
 /**
  * Emojis store.
@@ -211,12 +211,23 @@ export const useEmojiStore = defineStore('emojis', () => {
    * Encodes the saved emojis and messages into a valid route query
    * string. The string is kept in the store itself.
    */
-  function generateQueryString() {
-    const emojisParam = '?emojis=' + savedEmojis.value.toString()
-    const message1Param = '&msg1=' + savedMessage1.value.replace(/\s+/g, '_')
-    const message2Param = '&msg2=' + savedMessage2.value.replace(/\s+/g, '_')
+  function encodeShareParams() {
+    const emojisRaw = savedEmojis.value
+      .map((emoji) => {
+        return emoji.codepoint
+      })
+      .toString()
 
-    queryString.value = emojisParam + message1Param + message2Param
+    const emojisParam = encodeURIComponent(emojisRaw)
+    const message1Param = encodeURIComponent(savedMessage1.value)
+    const message2Param = encodeURIComponent(savedMessage2.value)
+
+    const params = new URLSearchParams()
+    params.set('emojis', emojisParam)
+    params.set('msg1', message1Param)
+    params.set('msg2', message2Param)
+
+    queryString.value = params.toString()
   }
 
   /**
@@ -225,22 +236,21 @@ export const useEmojiStore = defineStore('emojis', () => {
    *
    * @param parameters QUery parameters object obtained from the route.
    */
-  function parseQueryParameters(parameters: QueryParamsObject) {
-    stagingMessage1.value = parameters.msg1.replace(/_/g, ' ')
-    stagingMessage2.value = parameters.msg2.replace(/_/g, ' ')
+  function decodeShareParams(parameters: EmojiShareParams) {
+    stagingMessage1.value = decodeURIComponent(parameters.msg1)
+    stagingMessage2.value = decodeURIComponent(parameters.msg2)
 
-    const validCodepoints: ValidCodepoints[] = Array.from(allEmojis.value.keys())
-    const passedCodepoints: ValidCodepoints[] = []
-    const rawCodepoints: string[] = parameters.emojis.split(',')
+    const availableCodepoints: ValidCodepoints[] = Array.from(allEmojis.value.keys())
+    const receivedCodepoints: ValidCodepoints[] = decodeURIComponent(parameters.emojis)
+      .split(',')
+      .map((rawCodepoint) => {
+        return Number(rawCodepoint)
+      })
+      .filter((codepoint) => {
+        return availableCodepoints.includes(codepoint)
+      })
 
-    for (const rawCodepoint of rawCodepoints) {
-      const codepoint = Number(rawCodepoint)
-      if (validCodepoints.includes(codepoint)) {
-        passedCodepoints.push(codepoint)
-      }
-    }
-
-    stagingEmojis.value = passedCodepoints.map((codepoint) => {
+    stagingEmojis.value = receivedCodepoints.map((codepoint) => {
       return { codepoint, key: getRandomStr(10) }
     })
   }
@@ -254,7 +264,7 @@ export const useEmojiStore = defineStore('emojis', () => {
     savedMessage2.value = stagingMessage2.value
     savedEmojis.value = [...stagingEmojis.value]
 
-    generateQueryString()
+    encodeShareParams()
   }
 
   /**
@@ -319,7 +329,8 @@ export const useEmojiStore = defineStore('emojis', () => {
     queryString,
     clearSave,
     clearStage,
-    generateQueryString,
+    decodeShareParams,
+    encodeShareParams,
     insertEmojiAtIndex,
     loadEmojis,
     loadState,
@@ -327,7 +338,6 @@ export const useEmojiStore = defineStore('emojis', () => {
     moveFromIndex,
     moveLeft,
     moveRight,
-    parseQueryParameters,
     removeEmoji,
     resetAndRandomizeEmojis,
     saveState,
