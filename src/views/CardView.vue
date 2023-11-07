@@ -94,7 +94,7 @@ onMounted(() => {
 
 function redirectToHome() {
   router.push({
-    name: 'Home'
+    name: 'home'
   })
 }
 
@@ -102,7 +102,7 @@ function setDefaultAndRedirectToHome() {
   store.clearSave()
   store.setDefaultCard()
   router.push({
-    name: 'Home'
+    name: 'home'
   })
 }
 </script>
