@@ -1,5 +1,4 @@
-import type { QueryParamsObject } from '@/models/utils'
-
+import type { EmojiShareParams } from '@/models/emojis'
 /**
  * Validates whether the passed argument is a valid query
  * params object.
@@ -8,10 +7,10 @@ import type { QueryParamsObject } from '@/models/utils'
  * @param strict Flag to perform a strict validation.
  * @returns `true` if the object is valid.
  */
-export function isQueryParamsObject(
+export function isEmojiShareParamsObject(
   obj: Record<string, string>,
   strict = false
-): obj is QueryParamsObject {
+): obj is EmojiShareParams {
   const requiredParams = ['emojis', 'msg1', 'msg2']
   const objKeys = Object.keys(obj)
   return (

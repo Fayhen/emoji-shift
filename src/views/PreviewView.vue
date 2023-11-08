@@ -1,10 +1,10 @@
 <template>
   <div class="preview">
-    <MessageWrapper :msg="state.savedMessage1" :editMode="false" />
+    <MessageWrapper :msg="store.savedMessage1" :editMode="false" />
     <EmojiWrapper :editMode="false" />
-    <MessageWrapper :msg="state.savedMessage2" :editMode="false" />
+    <MessageWrapper :msg="store.savedMessage2" :editMode="false" />
   </div>
-  <div v-if="state.queryString !== '' && state.savedEmojis.length > 0">
+  <div v-if="store.queryString !== '' && store.savedEmojis.length > 0">
     <p>Here is the URL for the emoji card above!</p>
     <p>Share it for people to see!</p>
     <div class="codebox">
@@ -17,12 +17,14 @@
 </template>
 
 <script setup lang="ts">
-import state from '@/stores/state'
+import { useEmojiStore } from '@/stores/emojis'
+
 import EmojiWrapper from '@/components/EmojiWrapper.vue'
 import MessageWrapper from '@/components/MessageWrapper.vue'
 
+const store = useEmojiStore()
 const currentRoute = window.location.href
-const cardLink = currentRoute.replace('/preview', '/view' + state.queryString)
+const cardLink = currentRoute.replace('/preview', '/view?' + store.queryString)
 </script>
 
 <style scoped>

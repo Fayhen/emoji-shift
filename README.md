@@ -1,27 +1,24 @@
 # emoji-shift
 
-This template should help get you started developing with Vue 3 in Vite.
+Welcome to Emoji-Shift! This is a Single Page Application built with Vue.js 3 and TypeScript.
 
-## Recommended IDE Setup
+Create simple emoji cards consisting of an array of emojis and optional top and bottom messages. Drag emojis around, randomize them, remove or add new ones. Use the save and load buttons to keep track of your progress and go to the preview page to check how it is turning out. In there you will also find a link that generate the card you have saved. You can copy it and share to whoever you like, and they'll be able to see the same card.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Emojis can be rendered differently whether you are viewing them on Google Chrome, Firefox, Safari and other platforms. The same card will look slightly different depending on the device, but it will always contain the same emojis and messages.
 
-## Type Support for `.vue` Imports in TS
+## Technical aspects
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+This application is built with  [Vue 3](https://vuejs.org/), [Vite](https://vitejs.dev/) and [TypeScript](https://www.typescriptlang.org/). It was originally built when the Vue 3 Composition API was on a early release stage as a practical experiment, with Webpack and a simple reactive store.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+This store consisted of a single reactive object that has since been replaced by a [Pinia](https://pinia.vuejs.org/) store. It keeps two separate emoji states: a staging state that is mutated directly by the user and a saved state that is kept separately and updated at specific times. The store contains all methods for handling the card contents and generating share URLs.
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+The card will be initialized with random emojis and predefined messages on initial render. If accessing the applications through a card URL, however, the corresponding emojis and messages will be loaded from the query string parameters. The user can then view the shared card and be able to edit it, or create a new one.
 
-## Customize configuration
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Project setup
+To run Emoji-Shift locally, simply clone this repository and follow the steps bellow.
 
-## Project Setup
+### Install dependencies
 
 ```sh
 yarn

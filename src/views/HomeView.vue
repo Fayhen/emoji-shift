@@ -1,39 +1,42 @@
 <template>
   <div class="home">
     <MessageWrapper
-      :msg="state.stagingMessage1"
+      :msg="store.stagingMessage1"
       :editMode="true"
-      @update="state.stagingMessage1 = $event"
+      @update="store.stagingMessage1 = $event"
     />
     <EmojiWrapper :editMode="true" />
     <MessageWrapper
-      :msg="state.stagingMessage2"
+      :msg="store.stagingMessage2"
       :editMode="true"
-      @update="state.stagingMessage2 = $event"
+      @update="store.stagingMessage2 = $event"
     />
     <div class="button-wrapper">
-      <!-- eslint-disable prettier/prettier -->
-      <button class="button-left-dynamic" title="Restart" @click="setDefault()">
+      <button class="button-left-dynamic" title="Restart" @click="store.setDefaultCard()">
         Restart
         <span class="material-icons"> restart_alt </span>
       </button>
       <button
         class="button-dynamic"
         title="Randomize all"
-        @click="randomEmojis(state.stagingEmojis.length)"
+        @click="store.resetAndRandomizeEmojis(store.stagingEmojis.length)"
       >
         Randomize
         <span class="material-icons"> category </span>
       </button>
-      <button class="button-dynamic" title="Save" @click="saveState(), showToast('Card saved!')">
+      <button
+        class="button-dynamic"
+        title="Save"
+        @click="store.saveState(), store.triggerToast('Card saved!')"
+      >
         Save
         <span class="material-icons"> save </span>
       </button>
-      <button class="button-dynamic" title="Load" @click="loadState()">
+      <button class="button-dynamic" title="Load" @click="store.loadState()">
         Load
         <span class="material-icons"> restore </span>
       </button>
-      <button class="button-right-dynamic" title="Clear all" @click="clearStage">
+      <button class="button-right-dynamic" title="Clear all" @click="store.clearStage()">
         Clear all
         <span class="material-icons"> clear </span>
       </button>
@@ -44,16 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import state from '@/stores/state'
-import {
-  showToast,
-  shiftEmoji,
-  randomEmojis,
-  setDefault,
-  saveState,
-  loadState,
-  clearStage
-} from '@/stores/methods'
+import { useEmojiStore } from '@/stores/emojis'
 
 import MessageWrapper from '@/components/MessageWrapper.vue'
 import EmojiWrapper from '@/components/EmojiWrapper.vue'
@@ -61,9 +55,10 @@ import AddEmoji from '@/components/AddEmoji.vue'
 
 import type { ValidCategories } from '@/models/emojis'
 
+const store = useEmojiStore()
+
 function newEmoji(category: ValidCategories) {
-  // console.log(category);
-  shiftEmoji(state.stagingEmojis.length, category)
+  store.shiftEmoji(store.stagingEmojis.length, category)
 }
 </script>
 
