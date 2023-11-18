@@ -1,17 +1,31 @@
 <template>
-  <div v-if="loading">
-    <span>⏲️ Loading card...</span>
-  </div>
-  <div v-else>
-    <MessageWrapper :msg="store.savedMessage1" :editMode="false" />
-    <EmojiWrapper :editMode="false" />
-    <MessageWrapper :msg="store.savedMessage2" :editMode="false" />
-    <div style="margin: 3em 0 2em 0">
-      <p>Like this card?</p>
-      <button class="button-left-dynamic" @click="redirectToHome">Edit it! 🎨</button>
-      <button class="button-right-dynamic" @click="setDefaultAndRedirectToHome">
-        Make your own! 💡
-      </button>
+  <div>
+    <div v-if="isLoading" data-test="loading-wrapper">
+      <span>⏲️ Loading card...</span>
+    </div>
+    <div v-else data-test="card-wrapper">
+      <div data-test="top-message-wrapper">
+        <MessageWrapper :editMode="false" :msg="store.savedMessage1" />
+      </div>
+      <div data-test="emojis-wrapper">
+        <EmojiWrapper :editMode="false" />
+      </div>
+      <div data-test="bottom-message-wrapper">
+        <MessageWrapper :editMode="false" :msg="store.savedMessage2" />
+      </div>
+      <div style="margin: 3em 0 2em 0">
+        <p>Like this card?</p>
+        <button class="button-left-dynamic" data-test="edit-button" @click="redirectToHome">
+          Edit it! 🎨
+        </button>
+        <button
+          class="button-right-dynamic"
+          data-test="home-button"
+          @click="setDefaultAndRedirectToHome"
+        >
+          Make your own! 💡
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -29,9 +43,11 @@ import { isEmojiShareParamsObject } from '@/models/type-guards'
 const store = useEmojiStore()
 const router = useRouter()
 const route = useRoute()
-const loading = ref(true)
+const isLoading = ref(false)
 
 onMounted(() => {
+  isLoading.value = true
+
   if (store.allEmojis.size === 0) {
     store.loadEmojis()
   }
@@ -54,10 +70,10 @@ onMounted(() => {
         store.encodeShareParams()
 
         // Exit loading and give feedback to the user
-        loading.value = false
+        isLoading.value = false
         store.triggerToast('You received an Emoji Card!')
       } else {
-        // If no emojis were given, make a card
+        // If no emojis were given, make a predefined card
         store.resetAndRandomizeEmojis()
         store.stagingMessage1 = 'You received an Emoji Card!'
         store.stagingMessage2 = 'It had no emojis. 👀 So I made you one! 😊'
@@ -65,7 +81,7 @@ onMounted(() => {
         // Save, render, exit loading and notify user
         store.saveState()
         store.encodeShareParams()
-        loading.value = false
+        isLoading.value = false
         store.triggerToast('You received an Emoji Card!')
       }
     } catch (error) {
@@ -76,7 +92,7 @@ onMounted(() => {
 
       store.saveState()
       store.encodeShareParams()
-      loading.value = false
+      isLoading.value = false
       store.triggerToast('You received an Emoji Card!')
     }
   } else {
@@ -87,7 +103,7 @@ onMounted(() => {
 
     store.saveState()
     store.encodeShareParams()
-    loading.value = false
+    isLoading.value = false
     store.triggerToast('You received an Emoji Card!')
   }
 })

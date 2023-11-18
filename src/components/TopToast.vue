@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-fade">
-    <div id="toast" v-if="store.showToast">
+    <div v-if="store.showToast" id="toast" data-test="toast">
       {{ store.toastMsg }}
     </div>
   </transition>

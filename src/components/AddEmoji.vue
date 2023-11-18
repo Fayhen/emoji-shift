@@ -1,13 +1,13 @@
 <template>
   <div>
     <p>Add Emojis!</p>
-    <div class="button-wrapper">
-      <button @click="addEmoji('hearts')">Add heart &#128149;</button>
-      <button @click="addEmoji('flowers')">Add flower &#127801;</button>
-      <button @click="addEmoji('fruits')">Add fruit &#127817;</button>
-      <button @click="addEmoji('animals')">Add animal &#128049;</button>
-      <button @click="addEmoji('food')">Add food &#129360;</button>
-      <button @click="addEmoji('astra')">Add astra &#127776;</button>
+    <div class="button-wrapper" data-test="button-wrapper">
+      <button data-test="add-emoji-button" @click="addEmoji('hearts')">Add heart &#128149;</button>
+      <button data-test="add-emoji-button" @click="addEmoji('flowers')">Add flower &#127801;</button>
+      <button data-test="add-emoji-button" @click="addEmoji('fruits')">Add fruit &#127817;</button>
+      <button data-test="add-emoji-button" @click="addEmoji('animals')">Add animal &#128049;</button>
+      <button data-test="add-emoji-button" @click="addEmoji('food')">Add food &#129360;</button>
+      <button data-test="add-emoji-button" @click="addEmoji('astra')">Add astra &#127776;</button>
     </div>
   </div>
 </template>

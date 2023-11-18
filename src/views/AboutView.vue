@@ -1,5 +1,5 @@
 <template>
-  <div class="about spaced-paragraphs">
+  <div class="about spaced-paragraphs" data-test="about-section">
     <h1>About Emoji-Shift:</h1>
     <p>Hi! Thank you for using my app! 😊</p>
     <p>

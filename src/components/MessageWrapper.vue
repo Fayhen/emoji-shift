@@ -1,42 +1,68 @@
 <template>
+  <!-- EDIT MODE -->
   <div v-if="editMode">
-    <!-- If no message is set and editMode is true, display option to add one -->
-    <div v-if="msg === ''" class="spaced-paragraphs">
+    <!-- If no message is set, show placeholders and allow user to set a new one -->
+    <div v-if="msg === ''" class="spaced-paragraphs" data-test="message-wrapper">
       <p>No message here.</p>
       <p>This area will not show up on your emoji card.</p>
-      <button class="pill-button" v-show="!showForm" @click="showForm = true">Add message!</button>
+      <button
+        v-show="!showForm"
+        class="pill-button"
+        data-test="edit-button"
+        @click="showForm = true"
+      >
+        Add message!
+      </button>
     </div>
+
     <!-- Display message and edit controls if message exists and editMode is true -->
     <div v-else>
-      <div class="message-wrapper">
+      <div class="message-wrapper" data-test="message-wrapper">
         <h1>{{ msg }}</h1>
         <div style="flex-direction: row">
-          <button class="button-left" v-show="!showForm" @click="showForm = true">
+          <button
+            v-show="!showForm"
+            class="button-left"
+            data-test="edit-button"
+            @click="showForm = true"
+          >
             Edit message
           </button>
-          <button class="button-right" v-show="!showForm" @click="removeMessage">Remove</button>
+          <button
+            v-show="!showForm"
+            class="button-right"
+            data-test="remove-button"
+            @click="removeMessage"
+          >
+            Remove
+          </button>
         </div>
       </div>
     </div>
     <div v-show="showForm">
-      <form @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit" data-test="message-form">
         <input
-          class="text-input"
-          :style="`width: ${inputWidth}`"
-          type="text"
+          v-model="newMsg"
           id="new-message"
           name="new-message"
+          data-test="message-input"
+          type="text"
+          class="text-input"
           placeholder="Type here:"
-          v-model="newMsg"
+          :style="`width: ${inputWidth}`"
           @keypress="updateInputWidth()"
         />
-        <button class="submit-button" type="submit" value="Submit">Done!</button>
+        <button class="submit-button" data-test="submit-button" type="submit" value="Submit">
+          Done!
+        </button>
       </form>
     </div>
   </div>
+
+  <!-- VIEW MODE -->
   <div v-else>
-    <!-- Hide message if none is set -->
-    <div v-if="msg !== ''">
+    <!-- Only render message when it is available -->
+    <div v-if="msg !== ''" data-test="message-wrapper">
       <h1>{{ msg }}</h1>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <p role="img" :aria-label="label">
+  <p role="img" :aria-label="label" data-test="emoji-item">
     {{ String.fromCodePoint(codepoint) }}
   </p>
 </template>

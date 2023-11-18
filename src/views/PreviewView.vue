@@ -1,18 +1,29 @@
 <template>
-  <div class="preview">
-    <MessageWrapper :msg="store.savedMessage1" :editMode="false" />
-    <EmojiWrapper :editMode="false" />
-    <MessageWrapper :msg="store.savedMessage2" :editMode="false" />
-  </div>
-  <div v-if="store.queryString !== '' && store.savedEmojis.length > 0">
-    <p>Here is the URL for the emoji card above!</p>
-    <p>Share it for people to see!</p>
-    <div class="codebox">
-      <p>{{ cardLink }}</p>
+  <div>
+    <div class="preview">
+      <div data-test="top-message-wrapper">
+        <MessageWrapper :msg="store.savedMessage1" :editMode="false" />
+      </div>
+      <div data-test="emojis-wrapper">
+        <EmojiWrapper :editMode="false" />
+      </div>
+      <div data-test="bottom-message-wrapper">
+        <MessageWrapper :msg="store.savedMessage2" :editMode="false" />
+      </div>
     </div>
-    <a :href="cardLink">
-      <button class="pill-button">Let me see it too!</button>
-    </a>
+    <div
+      v-if="store.queryString !== '' && store.savedEmojis.length > 0"
+      data-test="share-link-wrapper"
+    >
+      <p>Here is the URL for the emoji card above!</p>
+      <p>Share it for people to see!</p>
+      <div class="codebox">
+        <p>{{ cardLink }}</p>
+      </div>
+      <a :href="cardLink">
+        <button class="pill-button" data-test="view-redirect-button">Let me see it too!</button>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -24,7 +35,7 @@ import MessageWrapper from '@/components/MessageWrapper.vue'
 
 const store = useEmojiStore()
 const currentRoute = window.location.href
-const cardLink = currentRoute.replace('/preview', '/view?' + store.queryString)
+const cardLink = currentRoute.replace('/preview', '/view?') + store.queryString
 </script>
 
 <style scoped>
